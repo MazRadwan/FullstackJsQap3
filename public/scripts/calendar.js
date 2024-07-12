@@ -7,85 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("myModal");
   const closeModalButton = document.querySelector(".close");
 
-  const workoutClasses = [
-    {
-      date: "2024-07-10",
-      name: "Yoga",
-      type: "yoga",
-      instructor: "Alice",
-      duration: "1 hour",
-      details: "A relaxing yoga class.",
-    },
-    {
-      date: "2024-07-10",
-      name: "Pilates",
-      type: "pilates",
-      instructor: "Bob",
-      duration: "45 minutes",
-      details: "A core-strengthening pilates session.",
-    },
-    {
-      date: "2024-07-10",
-      name: "Spinning",
-      type: "spinning",
-      instructor: "Charlie",
-      duration: "30 minutes",
-      details: "A high-intensity spinning class.",
-    },
-    {
-      date: "2024-07-15",
-      name: "CrossFit",
-      type: "crossfit",
-      instructor: "Dave",
-      duration: "1 hour",
-      details: "A CrossFit workout.",
-    },
-    {
-      date: "2024-07-15",
-      name: "Aerobics",
-      type: "aerobics",
-      instructor: "Eve",
-      duration: "45 minutes",
-      details: "A fun aerobics session.",
-    },
-    {
-      date: "2024-07-15",
-      name: "Zumba",
-      type: "zumba",
-      instructor: "Fay",
-      duration: "1 hour",
-      details: "A Zumba dance workout.",
-    },
-    {
-      date: "2024-07-20",
-      name: "Boxing",
-      type: "boxing",
-      instructor: "Gina",
-      duration: "1 hour",
-      details: "A boxing class.",
-    },
-    {
-      date: "2024-07-20",
-      name: "HIIT",
-      type: "hiit",
-      instructor: "Henry",
-      duration: "30 minutes",
-      details: "A high-intensity interval training session.",
-    },
-    {
-      date: "2024-07-20",
-      name: "Swimming",
-      type: "swimming",
-      instructor: "Isla",
-      duration: "1 hour",
-      details: "A swimming workout.",
-    },
-    // Add more workout classes for other dates
-  ];
+  const fetchClasses = async (month, year) => {
+    const res = await fetch(`/api/fitness_classes?month=${month}&year=${year}`);
+    const classes = await res.json();
+    return classes;
+  };
 
-  let currentDate = new Date();
-
-  function renderCalendar() {
+  const renderCalendar = async () => {
     const month = currentDate.getMonth();
     const year = currentDate.getFullYear();
 
@@ -102,16 +30,20 @@ document.addEventListener("DOMContentLoaded", () => {
       daysContainer.innerHTML += "<div></div>";
     }
 
+    const classes = await fetchClasses(month + 1, year);
+
     for (let day = 1; day <= daysInMonth; day++) {
       const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(
         day
       ).padStart(2, "0")}`;
-      const workoutClassesForDay = workoutClasses.filter(
-        (wc) => wc.date === dateStr
-      );
+      const workoutClassesForDay = classes.filter((wc) => wc.date === dateStr);
       let dayHTML = `<div>${day}`;
       workoutClassesForDay.slice(0, 4).forEach((workout) => {
-        dayHTML += `<div class="workout ${workout.type}" data-name="${workout.name}" data-instructor="${workout.instructor}" data-duration="${workout.duration}" data-details="${workout.details}">${workout.name}</div>`;
+        dayHTML += `<div class="workout ${workout.class_type.toLowerCase()}" data-name="${
+          workout.class_name
+        }" data-instructor="${workout.instructor}" data-duration="${
+          workout.duration
+        }" data-details="${workout.details}">${workout.class_name}</div>`;
       });
       if (workoutClassesForDay.length > 4) {
         dayHTML += `<div class="workout more">+${
@@ -137,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.style.display = "block";
       });
     });
-  }
+  };
 
   prevButton.addEventListener("click", () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
@@ -171,5 +103,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  const currentDate = new Date();
   renderCalendar();
 });

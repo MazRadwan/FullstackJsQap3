@@ -1,7 +1,6 @@
 const express = require("express");
 const methodOverride = require("method-override");
 const path = require("path");
-const bodyParser = require("body-parser");
 const fitnessClassRoutes = require("./routes/api/fitnessClass");
 const loginRoutes = require("./routes/api/logins");
 const userRoutes = require("./routes/api/users");
@@ -17,13 +16,13 @@ app.set("views", path.join(__dirname, "views"));
 
 // Middleware
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({ extended: true })); // This is important for form submissions
+app.use(express.urlencoded({ extended: true })); // This is important for form submissions
 app.use(methodOverride("_method")); //  important for PUT and DELETE requests
 
 // Routes
 app.use("/api/fitness_classes", fitnessClassRoutes);
-app.use("/api/logins", loginRoutes);
-app.use("/api/users", userRoutes);
+// app.use("/api/logins", loginRoutes); // implement later
+// app.use("/api/users", userRoutes); //implement later
 
 app.get("/", (req, res) => {
   res.render("index");

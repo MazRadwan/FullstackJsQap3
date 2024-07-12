@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Staff - Manage Fitness Classes</title>
+    <link rel="stylesheet" href="/styles/form.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Manage Fitness Classes</h1>
+    </header>
+    <main>
+      <form id="fitness-class-form">
+        <label for="class_name">Class Name:</label>
+        <input type="text" id="class_name" name="class_name" required />
+
+        <label for="instructor">Instructor:</label>
+        <input type="text" id="instructor" name="instructor" required />
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required />
+
+        <label for="time">Time:</label>
+        <input type="time" id="time" name="time" required />
+
+        <label for="duration">Duration (minutes):</label>
+        <input type="number" id="duration" name="duration" required />
+
+        <label for="details">Details:</label>
+        <textarea id="details" name="details" required></textarea>
+
+        <label for="class_type">Class Type:</label>
+        <select id="class_type" name="class_type" required>
+          <option value="Yoga">Yoga</option>
+          <option value="Pilates">Pilates</option>
+          <option value="Spinning">Spinning</option>
+          <option value="CrossFit">CrossFit</option>
+          <option value="Aerobics">Aerobics</option>
+          <option value="Zumba">Zumba</option>
+          <option value="Boxing">Boxing</option>
+        </select>
+
+        <button type="submit">Add Class</button>
+      </form>
+
+      <div id="query-section">
+        <h2>Query Fitness Classes</h2>
+        <form id="query-form">
+          <label for="query-field">Search:</label>
+          <input type="text" id="query-field" name="query-field" />
+
+          <button type="submit">Search</button>
+        </form>
+        <div id="query-results"></div>
+      </div>
+    </main>
+    <script src="/scripts/staff.js"></script>
+  </body>
+</html>
