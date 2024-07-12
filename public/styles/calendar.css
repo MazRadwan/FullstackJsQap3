@@ -1,0 +1,196 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+}
+
+#calendar {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header button {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.header button:hover {
+  background-color: #555;
+}
+
+#month-year {
+  font-size: 1.5em;
+}
+
+.weekdays,
+.days {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.weekdays div,
+.days div {
+  width: calc(100% / 7);
+  text-align: center;
+  padding: 10px 0;
+}
+
+.days div {
+  border: 1px solid #ddd;
+  cursor: pointer;
+  position: relative;
+  height: 100px; /* Fixed height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.days div:hover {
+  background-color: #f1f1f1;
+}
+
+.days .workout {
+  width: 90%;
+  margin: 2px 0;
+  padding: 2px 4px;
+  font-size: 0.75em;
+  border-radius: 4px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.days .workout.yoga {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.days .workout.pilates {
+  background-color: #ffeeba;
+  border-color: #ffeeba;
+}
+
+.days .workout.spinning {
+  background-color: #bee5eb;
+  border-color: #bee5eb;
+}
+
+.days .workout.crossfit {
+  background-color: #f5c6cb;
+  border-color: #f5c6cb;
+}
+
+.days .workout.aerobics {
+  background-color: #c3e6cb;
+  border-color: #c3e6cb;
+}
+
+.days .workout.zumba {
+  background-color: #ffdf7e;
+  border-color: #ffdf7e;
+}
+
+.days .workout.boxing {
+  background-color: #f8d7da;
+  border-color: #f8d7da;
+}
+
+.days .workout.hiit {
+  background-color: #d1ecf1;
+  border-color: #d1ecf1;
+}
+
+.days .workout.swimming {
+  background-color: #d4edda;
+  border-color: #d4edda;
+}
+/* Existing styles */
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  animation: zoomIn 0.3s ease-out;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.7);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes zoomOut {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.7);
+  }
+}
