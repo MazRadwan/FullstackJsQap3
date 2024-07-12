@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer"); // I'm using puppeteer for UI testing
 
-// as a user i want to ensure that the calendar displays fitness classes and that the pop-up displays the correct class details
+// as a user i want to ensure that the calendar displays fitness classes
 describe("UI Tests", () => {
   let browser;
   let page;
@@ -14,6 +14,8 @@ describe("UI Tests", () => {
   afterAll(async () => {
     await browser.close();
   });
+
+  //  as a user i want to ensure that the pop-up displays the correct class details
 
   test("Calendar displays fitness classes", async () => {
     const classes = await page.$$eval(".workout", (elements) =>
