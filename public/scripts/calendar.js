@@ -99,6 +99,12 @@ document.addEventListener("DOMContentLoaded", () => {
       daysContainer.innerHTML += dayHTML;
     }
 
+    // Ensure the calendar has a complete number of rows (multiple of 7 columns)
+    const totalBoxes = Math.ceil((firstDayOfMonth + daysInMonth) / 7) * 7;
+    for (let i = daysContainer.childElementCount; i < totalBoxes; i++) {
+      daysContainer.innerHTML += "<div></div>";
+    }
+
     console.log("Calendar rendering complete");
     addWorkoutEventListeners();
   };
