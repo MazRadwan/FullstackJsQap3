@@ -1,13 +1,14 @@
 const pool = require("./db");
 
-const getAllClasses = function () {
-  if (DEBUG) console.log("fitnessClass.pg.dal.getAllClasses()");
+const getAllClasses = function (month, year) {
+  console.log(`Querying database for classes: month=${month}, year=${year}`);
   return new Promise(function (resolve, reject) {
-    const sql = "SELECT * FROM fitness_class";
+    const sql =
+      "SELECT * FROM fitness_class WHERE EXTRACT(MONTH FROM date) = $1 AND EXTRACT(YEAR FROM date) = $2";
     console.log("Executing SQL:", sql);
-    pool.query(sql, [], (err, result) => {
+    pool.query(sql, [month, year], (err, result) => {
       if (err) {
-        console.error("Error in getAllClasses:", err);
+        console.error("Database query error:", err);
         reject(err);
       } else {
         console.log("Retrieved rows:", result.rows);
