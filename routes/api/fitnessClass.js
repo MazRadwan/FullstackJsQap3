@@ -4,20 +4,15 @@ const fitnessClassDal = require("../../services/fitnessClass.dal");
 
 // GET all fitness classes
 router.get("/", async (req, res) => {
-  if (DEBUG) console.log("ROUTE: /api/fitness_classes/ GET " + req.url);
+  const { month, year } = req.query;
+  console.log(`Received request for classes: month=${month}, year=${year}`);
   try {
-    const classes = await fitnessClassDal.getAllClasses();
-    console.log("Retrieved classes:", classes);
+    const classes = await fitnessClassDal.getAllClasses(month, year);
+    console.log("Classes fetched from database:", classes);
     res.json(classes);
   } catch (err) {
-    console.error("Error in GET /api/fitness_classes:", err);
-    res
-      .status(503)
-      .json({
-        message: "Service Unavailable",
-        status: 503,
-        error: err.message,
-      });
+    console.error("Error fetching classes:", err);
+    res.status(503).json({ message: "Service Unavailable", status: 503 });
   }
 });
 
@@ -33,13 +28,11 @@ router.get("/:id", async (req, res) => {
     }
   } catch (err) {
     console.error("Error in GET /api/fitness_classes/:id:", err);
-    res
-      .status(503)
-      .json({
-        message: "Service Unavailable",
-        status: 503,
-        error: err.message,
-      });
+    res.status(503).json({
+      message: "Service Unavailable",
+      status: 503,
+      error: err.message,
+    });
   }
 });
 
@@ -61,12 +54,10 @@ router.post("/", async (req, res) => {
     ];
     const missingFields = requiredFields.filter((field) => !newClass[field]);
     if (missingFields.length > 0) {
-      return res
-        .status(400)
-        .json({
-          message: `Missing required fields: ${missingFields.join(", ")}`,
-          status: 400,
-        });
+      return res.status(400).json({
+        message: `Missing required fields: ${missingFields.join(", ")}`,
+        status: 400,
+      });
     }
 
     const createdClass = await fitnessClassDal.createClass(newClass);
@@ -76,13 +67,11 @@ router.post("/", async (req, res) => {
       .json({ message: "Created", status: 201, data: createdClass });
   } catch (err) {
     console.error("Error in POST /api/fitness_classes:", err);
-    res
-      .status(503)
-      .json({
-        message: "Service Unavailable",
-        status: 503,
-        error: err.message,
-      });
+    res.status(503).json({
+      message: "Service Unavailable",
+      status: 503,
+      error: err.message,
+    });
   }
 });
 
@@ -102,13 +91,11 @@ router.put("/:id", async (req, res) => {
     }
   } catch (err) {
     console.error("Error in PUT /api/fitness_classes/:id:", err);
-    res
-      .status(503)
-      .json({
-        message: "Service Unavailable",
-        status: 503,
-        error: err.message,
-      });
+    res.status(503).json({
+      message: "Service Unavailable",
+      status: 503,
+      error: err.message,
+    });
   }
 });
 
@@ -130,13 +117,11 @@ router.patch("/:id", async (req, res) => {
     }
   } catch (err) {
     console.error("Error in PATCH /api/fitness_classes/:id:", err);
-    res
-      .status(503)
-      .json({
-        message: "Service Unavailable",
-        status: 503,
-        error: err.message,
-      });
+    res.status(503).json({
+      message: "Service Unavailable",
+      status: 503,
+      error: err.message,
+    });
   }
 });
 
@@ -152,13 +137,11 @@ router.delete("/:id", async (req, res) => {
     }
   } catch (err) {
     console.error("Error in DELETE /api/fitness_classes/:id:", err);
-    res
-      .status(503)
-      .json({
-        message: "Service Unavailable",
-        status: 503,
-        error: err.message,
-      });
+    res.status(503).json({
+      message: "Service Unavailable",
+      status: 503,
+      error: err.message,
+    });
   }
 });
 
