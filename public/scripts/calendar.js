@@ -7,7 +7,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("myModal");
   const closeModalButton = document.querySelector(".close");
 
-  const currentDate = new Date();
+  let currentDate = new Date();
+
+  const fetchClasses = async (month, year) => {
+    try {
+      const res = await fetch(
+        `/api/fitness_classes?month=${month}&year=${year}`
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch classes");
+      }
+      return await res.json();
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+      return [];
+    }
+  };
 
   const renderCalendar = async () => {
     const month = currentDate.getMonth();
@@ -26,9 +41,48 @@ document.addEventListener("DOMContentLoaded", () => {
       daysContainer.innerHTML += "<div></div>";
     }
 
+    const classes = await fetchClasses(month + 1, year);
     for (let day = 1; day <= daysInMonth; day++) {
-      daysContainer.innerHTML += `<div>${day}</div>`;
+      const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(
+        day
+      ).padStart(2, "0")}`;
+      const workoutClassesForDay = classes.filter((wc) => wc.date === dateStr);
+      let dayHTML = `<div>${day}`;
+      workoutClassesForDay.slice(0, 4).forEach((workout) => {
+        dayHTML += `<div class="workout ${workout.class_type.toLowerCase()}" data-name="${
+          workout.class_name
+        }" data-instructor="${workout.instructor}" data-duration="${
+          workout.duration
+        }" data-details="${workout.details}">${workout.class_name}</div>`;
+      });
+      if (workoutClassesForDay.length > 4) {
+        dayHTML += `<div class="workout more">+${
+          workoutClassesForDay.length - 4
+        } more</div>`;
+      }
+      dayHTML += "</div>";
+      daysContainer.innerHTML += dayHTML;
     }
+
+    addWorkoutEventListeners();
+  };
+
+  const addWorkoutEventListeners = () => {
+    document.querySelectorAll(".workout").forEach((item) => {
+      item.addEventListener("click", function () {
+        const name = this.getAttribute("data-name");
+        const instructor = this.getAttribute("data-instructor");
+        const duration = this.getAttribute("data-duration");
+        const details = this.getAttribute("data-details");
+
+        document.getElementById("modal-class-name").innerText = name;
+        document.getElementById("modal-instructor").innerText = instructor;
+        document.getElementById("modal-duration").innerText = duration;
+        document.getElementById("modal-details").innerText = details;
+
+        modal.style.display = "block";
+      });
+    });
   };
 
   prevButton.addEventListener("click", () => {
@@ -39,6 +93,28 @@ document.addEventListener("DOMContentLoaded", () => {
   nextButton.addEventListener("click", () => {
     currentDate.setMonth(currentDate.getMonth() + 1);
     renderCalendar();
+  });
+
+  closeModalButton.addEventListener("click", () => {
+    modal.querySelector(".modal-content").style.animation =
+      "zoomOut 0.3s ease-out";
+    setTimeout(() => {
+      modal.style.display = "none";
+      modal.querySelector(".modal-content").style.animation =
+        "zoomIn 0.3s ease-out";
+    }, 300);
+  });
+
+  window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.querySelector(".modal-content").style.animation =
+        "zoomOut 0.3s ease-out";
+      setTimeout(() => {
+        modal.style.display = "none";
+        modal.querySelector(".modal-content").style.animation =
+          "zoomIn 0.3s ease-out";
+      }, 300);
+    }
   });
 
   renderCalendar();
