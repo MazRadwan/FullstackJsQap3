@@ -2,58 +2,42 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Staff - Manage Fitness Classes</title>
-    <link rel="stylesheet" href="/styles/form.css" />
+    <title>Staff Interface</title>
+    <link rel="stylesheet" href="/styles/staff.css" />
   </head>
   <body>
     <header>
-      <h1>Manage Fitness Classes</h1>
+      <h1>Staff Interface</h1>
+      <nav>
+        <ul>
+          <li><button id="search-classes-btn">Search Classes</button></li>
+          <li><button id="add-class-btn">Add New Class</button></li>
+          <li><button id="update-class-btn">Update Class</button></li>
+          <li>
+            <button id="update-class-field-btn">Update Class Field</button>
+          </li>
+        </ul>
+      </nav>
     </header>
     <main>
-      <form id="fitness-class-form">
-        <label for="class_name">Class Name:</label>
-        <input type="text" id="class_name" name="class_name" required />
-
-        <label for="instructor">Instructor:</label>
-        <input type="text" id="instructor" name="instructor" required />
-
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" required />
-
-        <label for="time">Time:</label>
-        <input type="time" id="time" name="time" required />
-
-        <label for="duration">Duration (minutes):</label>
-        <input type="number" id="duration" name="duration" required />
-
-        <label for="details">Details:</label>
-        <textarea id="details" name="details" required></textarea>
-
-        <label for="class_type">Class Type:</label>
-        <select id="class_type" name="class_type" required>
-          <option value="Yoga">Yoga</option>
-          <option value="Pilates">Pilates</option>
-          <option value="Spinning">Spinning</option>
-          <option value="CrossFit">CrossFit</option>
-          <option value="Aerobics">Aerobics</option>
-          <option value="Zumba">Zumba</option>
-          <option value="Boxing">Boxing</option>
-        </select>
-
-        <button type="submit">Add Class</button>
-      </form>
-
-      <div id="query-section">
-        <h2>Query Fitness Classes</h2>
-        <form id="query-form">
-          <label for="query-field">Search:</label>
-          <input type="text" id="query-field" name="query-field" />
-
-          <button type="submit">Search</button>
-        </form>
+      <section id="form-section">
+        <h2>Search Classes</h2>
+        <div id="search-bar">
+          <input type="text" id="query-field" placeholder="Search..." />
+          <select id="query-attribute">
+            <option value="class_name">Class Name</option>
+            <option value="instructor">Instructor</option>
+            <!-- Add more options as needed -->
+          </select>
+          <button id="search-button">Search</button>
+        </div>
+      </section>
+      <section id="results-section">
         <div id="query-results"></div>
-      </div>
+      </section>
+      <section id="update-field-section">
+        <!-- This section will be used for the update field functionality -->
+      </section>
     </main>
     <script src="/scripts/staff.js"></script>
   </body>
