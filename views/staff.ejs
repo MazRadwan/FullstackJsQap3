@@ -3,23 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <title>Staff Interface</title>
+    <link rel="stylesheet" href="/styles/header.css" />
     <link rel="stylesheet" href="/styles/staff.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jura:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <header>
-      <h1>Staff Interface</h1>
-      <nav>
-        <ul>
-          <li><button id="search-classes-btn">Search Classes</button></li>
-          <li><button id="add-class-btn">Add New Class</button></li>
-          <li><button id="update-class-btn">Update Class</button></li>
-          <li>
-            <button id="update-class-field-btn">Update Class Field</button>
-          </li>
-        </ul>
-      </nav>
-    </header>
+    <%- include('partials/header') %>
     <main>
+      <section id="button-section">
+        <header>
+          <h1>Staff Interface</h1>
+          <nav>
+            <ul>
+              <li><button id="search-classes-btn">Search Classes</button></li>
+              <li><button id="add-class-btn">Add New Class</button></li>
+              <li><button id="update-class-btn">Update Class</button></li>
+              <li>
+                <button id="update-class-field-btn">Update Class Field</button>
+              </li>
+            </ul>
+          </nav>
+        </header>
+      </section>
       <section id="form-section">
         <h2>Search Classes</h2>
         <div id="search-bar">
@@ -27,15 +35,14 @@
           <select id="query-attribute">
             <option value="class_name">Class Name</option>
             <option value="instructor">Instructor</option>
-            <!-- Add more options as needed -->
           </select>
           <button id="search-button">Search</button>
         </div>
       </section>
-      <section id="results-section">
+      <section id="results-section" style="display: none">
         <div id="query-results"></div>
       </section>
-      <section id="update-field-section">
+      <section id="update-field-section" style="display: none">
         <!-- This section will be used for the update field functionality -->
       </section>
     </main>
