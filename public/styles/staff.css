@@ -230,3 +230,53 @@ form select {
 form textarea {
   resize: vertical;
 }
+/* Search Bar Styles */
+#search-bar,
+#update-field-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+#search-bar input[type="text"],
+#update-field-search-bar input[type="text"] {
+  width: 200px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#search-bar select,
+#update-field-search-bar select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#search-bar button,
+#update-field-search-bar button {
+  background-color: #2196f3; /* Blue */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+#search-bar button:hover,
+#update-field-search-bar button:hover {
+  background-color: #0b7dda;
+}

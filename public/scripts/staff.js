@@ -487,17 +487,17 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("update-class-field-btn")
     .addEventListener("click", () => {
       formSection.innerHTML = `
-        <h2>Search Class to Update Field</h2>
-        <div id="search-bar">
-          <input type="text" id="update-field-query" placeholder="Search...">
-          <select id="update-field-attribute">
-            <option value="class_name">Class Name</option>
-            <option value="instructor">Instructor</option>
-            <!-- Add more options as needed -->
-          </select>
-          <button id="update-field-search-button" class="update-button">Search</button>
-        </div>
-      `;
+      <h2>Search Class to Update Field</h2>
+      <div id="update-field-search-bar">
+        <input type="text" id="update-field-query" placeholder="Search...">
+        <select id="update-field-attribute">
+          <option value="class_name">Class Name</option>
+          <option value="instructor">Instructor</option>
+          <!-- Add more options as needed -->
+        </select>
+        <button id="update-field-search-button" class="update-button">Search</button>
+      </div>
+    `;
       updateFieldSection.innerHTML = ""; // Clear query results
       setupUpdateFieldQueryForm();
     });
