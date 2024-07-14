@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <option value="instructor">Instructor</option>
                     <!-- Add more options as needed -->
                   </select>
-                  <button id="search-button">Search</button>
+                  <button id="search-button" class="update-button">Search</button>
                 </div>
               `;
             setupQueryForm();
@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   <p><strong>Time:</strong> ${formatTime(result.time)}</p>
                   <p><strong>Duration:</strong> ${result.duration} minutes</p>
                   <p><strong>Details:</strong> ${result.details}</p>
-                  <button onclick="selectClassToUpdate(${
+                  <button class="update-button" onclick="selectClassToUpdate(${
                     result.id
                   })">Update</button>
                 </div>
@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   <p><strong>Time:</strong> ${formatTime(result.time)}</p>
                   <p><strong>Duration:</strong> ${result.duration} minutes</p>
                   <p><strong>Details:</strong> ${result.details}</p>
-                  <button onclick="selectFieldToUpdate(${
+                  <button class="update-button" onclick="selectFieldToUpdate(${
                     result.id
                   })">Update Field</button>
                 </div>
@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <option value="details">Details</option>
             <option value="class_type">Class Type</option>
           </select>
-          <button id="field-select-button">Select</button>
+          <button id="field-select-button" class="update-button">Select</button>
         </div>
         <div id="update-field-input"></div>
       `;
@@ -225,6 +225,92 @@ document.addEventListener("DOMContentLoaded", () => {
         const selectedField = document.getElementById("field-select").value;
         displayFieldInput(selectedClassId, selectedField);
       });
+  };
+
+  window.selectClassToUpdate = async (id) => {
+    try {
+      const res = await fetch(`/api/fitness_classes/${id}`);
+      if (res.ok) {
+        const classData = await res.json();
+        formSection.innerHTML = `
+          <h2>Update Class</h2>
+          <form id="fitness-class-form">
+            <input type="hidden" id="id" name="id" value="${classData.id}">
+            <div>
+              <label for="class_name">Class Name:</label>
+              <input type="text" id="class_name" name="class_name" value="${
+                classData.class_name
+              }" required>
+            </div>
+            <div>
+              <label for="instructor">Instructor:</label>
+              <input type="text" id="instructor" name="instructor" value="${
+                classData.instructor
+              }" required>
+            </div>
+            <div>
+              <label for="date">Date:</label>
+              <input type="date" id="date" name="date" value="${
+                classData.date.split("T")[0]
+              }" required>
+            </div>
+            <div>
+              <label for="time">Time:</label>
+              <input type="time" id="time" name="time" value="${
+                classData.time
+              }" required>
+            </div>
+            <div>
+              <label for="duration">Duration (minutes):</label>
+              <input type="number" id="duration" name="duration" value="${
+                classData.duration
+              }" required>
+            </div>
+            <div>
+              <label for="details">Details:</label>
+              <textarea id="details" name="details">${
+                classData.details
+              }</textarea>
+            </div>
+            <div>
+              <label for="class_type">Class Type:</label>
+              <select id="class_type" name="class_type" required>
+                <option value="Yoga" ${
+                  classData.class_type === "Yoga" ? "selected" : ""
+                }>Yoga</option>
+                <option value="Pilates" ${
+                  classData.class_type === "Pilates" ? "selected" : ""
+                }>Pilates</option>
+                <option value="Spinning" ${
+                  classData.class_type === "Spinning" ? "selected" : ""
+                }>Spinning</option>
+                <option value="CrossFit" ${
+                  classData.class_type === "CrossFit" ? "selected" : ""
+                }>CrossFit</option>
+                <option value="Aerobics" ${
+                  classData.class_type === "Aerobics" ? "selected" : ""
+                }>Aerobics</option>
+                <option value="Zumba" ${
+                  classData.class_type === "Zumba" ? "selected" : ""
+                }>Zumba</option>
+                <option value="Boxing" ${
+                  classData.class_type === "Boxing" ? "selected" : ""
+                }>Boxing</option>
+              </select>
+            </div>
+            <button type="submit" class="update-button">Update</button>
+          </form>
+        `;
+        queryResults.innerHTML = ""; // Clear query results
+        setupFormSubmit("PUT");
+      } else {
+        const errorData = await res.json();
+        alert(`Error: ${errorData.message || "Unknown error occurred"}`);
+      }
+    } catch (error) {
+      console.error("Error fetching class data:", error);
+      alert("An error occurred. Please check the console for details.");
+    }
   };
 
   function displayFieldInput(classId, field) {
@@ -264,7 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div>
           <label for="field-input">New ${field.replace("_", " ")}:</label>
           ${inputField}
-          <button id="update-field-button">Update</button>
+          <button id="update-field-button" class="update-button">Update</button>
         </div>
       `;
     document
@@ -309,7 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <option value="instructor">Instructor</option>
           <!-- Add more options as needed -->
         </select>
-        <button id="search-button">Search</button>
+        <button id="search-button" class="update-button">Search</button>
       </div>
     `;
   setupQueryForm();
@@ -326,7 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <option value="instructor">Instructor</option>
             <!-- Add more options as needed -->
           </select>
-          <button id="search-button">Search</button>
+          <button id="search-button" class="update-button">Search</button>
         </div>
       `;
       queryResults.innerHTML = ""; // Clear query results
@@ -373,7 +459,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <option value="Boxing">Boxing</option>
             </select>
           </div>
-          <button type="submit">Submit</button>
+          <button type="submit" class="update-button">Submit</button>
         </form>
       `;
     queryResults.innerHTML = ""; // Clear query results
@@ -390,7 +476,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <option value="instructor">Instructor</option>
             <!-- Add more options as needed -->
           </select>
-          <button id="search-button">Search</button>
+          <button id="search-button" class="update-button">Search</button>
         </div>
       `;
     queryResults.innerHTML = ""; // Clear query results
@@ -409,7 +495,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <option value="instructor">Instructor</option>
             <!-- Add more options as needed -->
           </select>
-          <button id="update-field-search-button">Search</button>
+          <button id="update-field-search-button" class="update-button">Search</button>
         </div>
       `;
       updateFieldSection.innerHTML = ""; // Clear query results
