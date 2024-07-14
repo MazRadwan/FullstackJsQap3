@@ -1,0 +1,50 @@
+/* public/styles/header.css */
+
+.header-container {
+  background-color: rgba(227, 227, 223, 0.53);
+  padding: 10px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-logo a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.header-logo img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.header-title {
+  font-family: "Jura", sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+  color: #2da7fb;
+}
+
+.header-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.header-nav-link {
+  font-family: "Jura", sans-serif;
+  font-weight: medium;
+  font-size: 18px;
+  color: #474444;
+  text-decoration: none;
+}
+
+.header-nav-link:hover {
+  color: #2da7fb;
+}

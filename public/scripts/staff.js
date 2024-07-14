@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const formSection = document.getElementById("form-section");
-  const queryResults = document.getElementById("query-results");
+  const queryResults = document.getElementById("results-section");
   const updateFieldSection = document.getElementById("update-field-section");
 
   const setupFormSubmit = (method) => {
@@ -24,17 +24,17 @@ document.addEventListener("DOMContentLoaded", () => {
           if (method === "PUT") {
             formSection.innerHTML = "";
             formSection.innerHTML = `
-                <h2>Search Class to Update</h2>
-                <div id="search-bar">
-                  <input type="text" id="query-field" placeholder="Search...">
-                  <select id="query-attribute">
-                    <option value="class_name">Class Name</option>
-                    <option value="instructor">Instructor</option>
-                    <!-- Add more options as needed -->
-                  </select>
-                  <button id="search-button" class="update-button">Search</button>
-                </div>
-              `;
+                  <h2>Search Class to Update</h2>
+                  <div id="search-bar">
+                    <input type="text" id="query-field" placeholder="Search...">
+                    <select id="query-attribute">
+                      <option value="class_name">Class Name</option>
+                      <option value="instructor">Instructor</option>
+                      <!-- Add more options as needed -->
+                    </select>
+                    <button id="search-button" class="update-button">Search</button>
+                  </div>
+                `;
             setupQueryForm();
           }
           if (
@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "<p>Please enter a query and select an attribute to search.</p>";
       return;
     }
+    queryResults.style.display = "block"; // Show the results section
     queryResults.innerHTML = "<p>Loading...</p>"; // Provide immediate feedback
     try {
       const res = await fetch(
@@ -112,22 +113,22 @@ document.addEventListener("DOMContentLoaded", () => {
           ? results
               .map(
                 (result) => `
-                <div class="query-result-item">
-                  <h3>${
-                    result.class_name
-                  } <span class="badge ${result.class_type.toLowerCase()}">${
+                  <div class="query-result-item">
+                    <h3>${
+                      result.class_name
+                    } <span class="badge ${result.class_type.toLowerCase()}">${
                   result.class_type
                 }</span></h3>
-                  <p><strong>Instructor:</strong> ${result.instructor}</p>
-                  <p><strong>Date:</strong> ${formatDate(result.date)}</p>
-                  <p><strong>Time:</strong> ${formatTime(result.time)}</p>
-                  <p><strong>Duration:</strong> ${result.duration} minutes</p>
-                  <p><strong>Details:</strong> ${result.details}</p>
-                  <button class="update-button" onclick="selectClassToUpdate(${
-                    result.id
-                  })">Update</button>
-                </div>
-              `
+                    <p><strong>Instructor:</strong> ${result.instructor}</p>
+                    <p><strong>Date:</strong> ${formatDate(result.date)}</p>
+                    <p><strong>Time:</strong> ${formatTime(result.time)}</p>
+                    <p><strong>Duration:</strong> ${result.duration} minutes</p>
+                    <p><strong>Details:</strong> ${result.details}</p>
+                    <button class="update-button" onclick="selectClassToUpdate(${
+                      result.id
+                    })">Update</button>
+                  </div>
+                `
               )
               .join("")
           : "<p>No results found.</p>";
@@ -154,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "<p>Please enter a query and select an attribute to search.</p>";
       return;
     }
+    updateFieldSection.style.display = "block"; // Show the update field section
     updateFieldSection.innerHTML = "<p>Loading...</p>"; // Provide immediate feedback
     try {
       const res = await fetch(
@@ -167,22 +169,22 @@ document.addEventListener("DOMContentLoaded", () => {
           ? results
               .map(
                 (result) => `
-                <div class="query-result-item">
-                  <h3>${
-                    result.class_name
-                  } <span class="badge ${result.class_type.toLowerCase()}">${
+                  <div class="query-result-item">
+                    <h3>${
+                      result.class_name
+                    } <span class="badge ${result.class_type.toLowerCase()}">${
                   result.class_type
                 }</span></h3>
-                  <p><strong>Instructor:</strong> ${result.instructor}</p>
-                  <p><strong>Date:</strong> ${formatDate(result.date)}</p>
-                  <p><strong>Time:</strong> ${formatTime(result.time)}</p>
-                  <p><strong>Duration:</strong> ${result.duration} minutes</p>
-                  <p><strong>Details:</strong> ${result.details}</p>
-                  <button class="update-button" onclick="selectFieldToUpdate(${
-                    result.id
-                  })">Update Field</button>
-                </div>
-              `
+                    <p><strong>Instructor:</strong> ${result.instructor}</p>
+                    <p><strong>Date:</strong> ${formatDate(result.date)}</p>
+                    <p><strong>Time:</strong> ${formatTime(result.time)}</p>
+                    <p><strong>Duration:</strong> ${result.duration} minutes</p>
+                    <p><strong>Details:</strong> ${result.details}</p>
+                    <button class="update-button" onclick="selectFieldToUpdate(${
+                      result.id
+                    })">Update Field</button>
+                  </div>
+                `
               )
               .join("")
           : "<p>No results found.</p>";
@@ -204,21 +206,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectedClassId = id;
     // Display the dropdown menu for selecting the field to update
     updateFieldSection.innerHTML = `
-        <div>
-          <label for="field-select">Select Field to Update:</label>
-          <select id="field-select">
-            <option value="class_name">Class Name</option>
-            <option value="instructor">Instructor</option>
-            <option value="date">Date</option>
-            <option value="time">Time</option>
-            <option value="duration">Duration</option>
-            <option value="details">Details</option>
-            <option value="class_type">Class Type</option>
-          </select>
-          <button id="field-select-button" class="update-button">Select</button>
-        </div>
-        <div id="update-field-input"></div>
-      `;
+          <div>
+            <label for="field-select">Select Field to Update:</label>
+            <select id="field-select">
+              <option value="class_name">Class Name</option>
+              <option value="instructor">Instructor</option>
+              <option value="date">Date</option>
+              <option value="time">Time</option>
+              <option value="duration">Duration</option>
+              <option value="details">Details</option>
+              <option value="class_type">Class Type</option>
+            </select>
+            <button id="field-select-button" class="update-button">Select</button>
+          </div>
+          <div id="update-field-input"></div>
+        `;
     document
       .getElementById("field-select-button")
       .addEventListener("click", () => {
@@ -233,74 +235,74 @@ document.addEventListener("DOMContentLoaded", () => {
       if (res.ok) {
         const classData = await res.json();
         formSection.innerHTML = `
-          <h2>Update Class</h2>
-          <form id="fitness-class-form">
-            <input type="hidden" id="id" name="id" value="${classData.id}">
-            <div>
-              <label for="class_name">Class Name:</label>
-              <input type="text" id="class_name" name="class_name" value="${
-                classData.class_name
-              }" required>
-            </div>
-            <div>
-              <label for="instructor">Instructor:</label>
-              <input type="text" id="instructor" name="instructor" value="${
-                classData.instructor
-              }" required>
-            </div>
-            <div>
-              <label for="date">Date:</label>
-              <input type="date" id="date" name="date" value="${
-                classData.date.split("T")[0]
-              }" required>
-            </div>
-            <div>
-              <label for="time">Time:</label>
-              <input type="time" id="time" name="time" value="${
-                classData.time
-              }" required>
-            </div>
-            <div>
-              <label for="duration">Duration (minutes):</label>
-              <input type="number" id="duration" name="duration" value="${
-                classData.duration
-              }" required>
-            </div>
-            <div>
-              <label for="details">Details:</label>
-              <textarea id="details" name="details">${
-                classData.details
-              }</textarea>
-            </div>
-            <div>
-              <label for="class_type">Class Type:</label>
-              <select id="class_type" name="class_type" required>
-                <option value="Yoga" ${
-                  classData.class_type === "Yoga" ? "selected" : ""
-                }>Yoga</option>
-                <option value="Pilates" ${
-                  classData.class_type === "Pilates" ? "selected" : ""
-                }>Pilates</option>
-                <option value="Spinning" ${
-                  classData.class_type === "Spinning" ? "selected" : ""
-                }>Spinning</option>
-                <option value="CrossFit" ${
-                  classData.class_type === "CrossFit" ? "selected" : ""
-                }>CrossFit</option>
-                <option value="Aerobics" ${
-                  classData.class_type === "Aerobics" ? "selected" : ""
-                }>Aerobics</option>
-                <option value="Zumba" ${
-                  classData.class_type === "Zumba" ? "selected" : ""
-                }>Zumba</option>
-                <option value="Boxing" ${
-                  classData.class_type === "Boxing" ? "selected" : ""
-                }>Boxing</option>
-              </select>
-            </div>
-            <button type="submit" class="update-button">Update</button>
-          </form>
-        `;
+            <h2>Update Class</h2>
+            <form id="fitness-class-form">
+              <input type="hidden" id="id" name="id" value="${classData.id}">
+              <div>
+                <label for="class_name">Class Name:</label>
+                <input type="text" id="class_name" name="class_name" value="${
+                  classData.class_name
+                }" required>
+              </div>
+              <div>
+                <label for="instructor">Instructor:</label>
+                <input type="text" id="instructor" name="instructor" value="${
+                  classData.instructor
+                }" required>
+              </div>
+              <div>
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" value="${
+                  classData.date.split("T")[0]
+                }" required>
+              </div>
+              <div>
+                <label for="time">Time:</label>
+                <input type="time" id="time" name="time" value="${
+                  classData.time
+                }" required>
+              </div>
+              <div>
+                <label for="duration">Duration (minutes):</label>
+                <input type="number" id="duration" name="duration" value="${
+                  classData.duration
+                }" required>
+              </div>
+              <div>
+                <label for="details">Details:</label>
+                <textarea id="details" name="details">${
+                  classData.details
+                }</textarea>
+              </div>
+              <div>
+                <label for="class_type">Class Type:</label>
+                <select id="class_type" name="class_type" required>
+                  <option value="Yoga" ${
+                    classData.class_type === "Yoga" ? "selected" : ""
+                  }>Yoga</option>
+                  <option value="Pilates" ${
+                    classData.class_type === "Pilates" ? "selected" : ""
+                  }>Pilates</option>
+                  <option value="Spinning" ${
+                    classData.class_type === "Spinning" ? "selected" : ""
+                  }>Spinning</option>
+                  <option value="CrossFit" ${
+                    classData.class_type === "CrossFit" ? "selected" : ""
+                  }>CrossFit</option>
+                  <option value="Aerobics" ${
+                    classData.class_type === "Aerobics" ? "selected" : ""
+                  }>Aerobics</option>
+                  <option value="Zumba" ${
+                    classData.class_type === "Zumba" ? "selected" : ""
+                  }>Zumba</option>
+                  <option value="Boxing" ${
+                    classData.class_type === "Boxing" ? "selected" : ""
+                  }>Boxing</option>
+                </select>
+              </div>
+              <button type="submit" class="update-button">Update</button>
+            </form>
+          `;
         queryResults.innerHTML = ""; // Clear query results
         setupFormSubmit("PUT");
       } else {
@@ -332,27 +334,27 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
       case "class_type":
         inputField = `
-            <select id="field-input" name="${field}" required>
-              <option value="Yoga">Yoga</option>
-              <option value="Pilates">Pilates</option>
-              <option value="Spinning">Spinning</option>
-              <option value="CrossFit">CrossFit</option>
-              <option value="Aerobics">Aerobics</option>
-              <option value="Zumba">Zumba</option>
-              <option value="Boxing">Boxing</option>
-            </select>
-          `;
+              <select id="field-input" name="${field}" required>
+                <option value="Yoga">Yoga</option>
+                <option value="Pilates">Pilates</option>
+                <option value="Spinning">Spinning</option>
+                <option value="CrossFit">CrossFit</option>
+                <option value="Aerobics">Aerobics</option>
+                <option value="Zumba">Zumba</option>
+                <option value="Boxing">Boxing</option>
+              </select>
+            `;
         break;
       default:
         inputField = `<input type="text" id="field-input" name="${field}" required>`;
     }
     updateFieldSection.innerHTML += `
-        <div>
-          <label for="field-input">New ${field.replace("_", " ")}:</label>
-          ${inputField}
-          <button id="update-field-button" class="update-button">Update</button>
-        </div>
-      `;
+          <div>
+            <label for="field-input">New ${field.replace("_", " ")}:</label>
+            ${inputField}
+            <button id="update-field-button" class="update-button">Update</button>
+          </div>
+        `;
     document
       .getElementById("update-field-button")
       .addEventListener("click", () => {
@@ -387,23 +389,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Set default state to search classes
   formSection.innerHTML = `
-      <h2>Search Classes</h2>
-      <div id="search-bar">
-        <input type="text" id="query-field" placeholder="Search...">
-        <select id="query-attribute">
-          <option value="class_name">Class Name</option>
-          <option value="instructor">Instructor</option>
-          <!-- Add more options as needed -->
-        </select>
-        <button id="search-button" class="update-button">Search</button>
-      </div>
-    `;
-  setupQueryForm();
-
-  document
-    .getElementById("search-classes-btn")
-    .addEventListener("click", () => {
-      formSection.innerHTML = `
         <h2>Search Classes</h2>
         <div id="search-bar">
           <input type="text" id="query-field" placeholder="Search...">
@@ -415,70 +400,90 @@ document.addEventListener("DOMContentLoaded", () => {
           <button id="search-button" class="update-button">Search</button>
         </div>
       `;
+  setupQueryForm();
+
+  document
+    .getElementById("search-classes-btn")
+    .addEventListener("click", () => {
+      formSection.innerHTML = `
+          <h2>Search Classes</h2>
+          <div id="search-bar">
+            <input type="text" id="query-field" placeholder="Search...">
+            <select id="query-attribute">
+              <option value="class_name">Class Name</option>
+              <option value="instructor">Instructor</option>
+              <!-- Add more options as needed -->
+            </select>
+            <button id="search-button" class="update-button">Search</button>
+          </div>
+        `;
+      queryResults.style.display = "none"; // Hide results section initially
       queryResults.innerHTML = ""; // Clear query results
       setupQueryForm();
     });
 
   document.getElementById("add-class-btn").addEventListener("click", () => {
     formSection.innerHTML = `
-        <h2>Add New Class</h2>
-        <form id="fitness-class-form">
-          <div>
-            <label for="class_name">Class Name:</label>
-            <input type="text" id="class_name" name="class_name" required>
-          </div>
-          <div>
-            <label for="instructor">Instructor:</label>
-            <input type="text" id="instructor" name="instructor" required>
-          </div>
-          <div>
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required>
-          </div>
-          <div>
-            <label for="time">Time:</label>
-            <input type="time" id="time" name="time" required>
-          </div>
-          <div>
-            <label for="duration">Duration (minutes):</label>
-            <input type="number" id="duration" name="duration" required>
-          </div>
-          <div>
-            <label for="details">Details:</label>
-            <textarea id="details" name="details"></textarea>
-          </div>
-          <div>
-            <label for="class_type">Class Type:</label>
-            <select id="class_type" name="class_type" required>
-              <option value="Yoga">Yoga</option>
-              <option value="Pilates">Pilates</option>
-              <option value="Spinning">Spinning</option>
-              <option value="CrossFit">CrossFit</option>
-              <option value="Aerobics">Aerobics</option>
-              <option value="Zumba">Zumba</option>
-              <option value="Boxing">Boxing</option>
-            </select>
-          </div>
-          <button type="submit" class="update-button">Submit</button>
-        </form>
-      `;
+          <h2>Add New Class</h2>
+          <form id="fitness-class-form">
+            <div>
+              <label for="class_name">Class Name:</label>
+              <input type="text" id="class_name" name="class_name" required>
+            </div>
+            <div>
+              <label for="instructor">Instructor:</label>
+              <input type="text" id="instructor" name="instructor" required>
+            </div>
+            <div>
+              <label for="date">Date:</label>
+              <input type="date" id="date" name="date" required>
+            </div>
+            <div>
+              <label for="time">Time:</label>
+              <input type="time" id="time" name="time" required>
+            </div>
+            <div>
+              <label for="duration">Duration (minutes):</label>
+              <input type="number" id="duration" name="duration" required>
+            </div>
+            <div>
+              <label for="details">Details:</label>
+              <textarea id="details" name="details"></textarea>
+            </div>
+            <div>
+              <label for="class_type">Class Type:</label>
+              <select id="class_type" name="class_type" required>
+                <option value="Yoga">Yoga</option>
+                <option value="Pilates">Pilates</option>
+                <option value="Spinning">Spinning</option>
+                <option value="CrossFit">CrossFit</option>
+                <option value="Aerobics">Aerobics</option>
+                <option value="Zumba">Zumba</option>
+                <option value="Boxing">Boxing</option>
+              </select>
+            </div>
+            <button type="submit" class="update-button">Submit</button>
+          </form>
+        `;
+    queryResults.style.display = "none"; // Hide results section initially
     queryResults.innerHTML = ""; // Clear query results
     setupFormSubmit("POST");
   });
 
   document.getElementById("update-class-btn").addEventListener("click", () => {
     formSection.innerHTML = `
-        <h2>Search Class to Update</h2>
-        <div id="search-bar">
-          <input type="text" id="query-field" placeholder="Search...">
-          <select id="query-attribute">
-            <option value="class_name">Class Name</option>
-            <option value="instructor">Instructor</option>
-            <!-- Add more options as needed -->
-          </select>
-          <button id="search-button" class="update-button">Search</button>
-        </div>
-      `;
+          <h2>Search Class to Update</h2>
+          <div id="search-bar">
+            <input type="text" id="query-field" placeholder="Search...">
+            <select id="query-attribute">
+              <option value="class_name">Class Name</option>
+              <option value="instructor">Instructor</option>
+              <!-- Add more options as needed -->
+            </select>
+            <button id="search-button" class="update-button">Search</button>
+          </div>
+        `;
+    queryResults.style.display = "none"; // Hide results section initially
     queryResults.innerHTML = ""; // Clear query results
     setupQueryForm();
   });
@@ -487,18 +492,19 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("update-class-field-btn")
     .addEventListener("click", () => {
       formSection.innerHTML = `
-      <h2>Search Class to Update Field</h2>
-      <div id="update-field-search-bar">
-        <input type="text" id="update-field-query" placeholder="Search...">
-        <select id="update-field-attribute">
-          <option value="class_name">Class Name</option>
-          <option value="instructor">Instructor</option>
-          <!-- Add more options as needed -->
-        </select>
-        <button id="update-field-search-button" class="update-button">Search</button>
-      </div>
-    `;
-      updateFieldSection.innerHTML = ""; // Clear query results
+        <h2>Search Class to Update Field</h2>
+        <div id="update-field-search-bar">
+          <input type="text" id="update-field-query" placeholder="Search...">
+          <select id="update-field-attribute">
+            <option value="class_name">Class Name</option>
+            <option value="instructor">Instructor</option>
+            <!-- Add more options as needed -->
+          </select>
+          <button id="update-field-search-button" class="update-button">Search</button>
+        </div>
+      `;
+      updateFieldSection.style.display = "none"; // Hide update field section initially
+      updateFieldSection.innerHTML = ""; // Clear update field section
       setupUpdateFieldQueryForm();
     });
 

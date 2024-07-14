@@ -1,0 +1,31 @@
+<!-- views/partials/header.ejs -->
+<link rel="stylesheet" href="/styles/header.css" />
+<header class="header-container">
+  <div class="header-content">
+    <div class="header-logo">
+      <a
+        href="/"
+        style="display: flex; align-items: center; text-decoration: none"
+      >
+        <img
+          src="/assets/sweatLogo.PNG"
+          alt="SweatSpot Logo"
+          style="height: 40px; margin-right: 10px"
+        />
+        <span class="header-title">SweatSpot</span>
+      </a>
+    </div>
+    <nav class="header-nav">
+      <ul class="header-nav-list">
+        <li><a href="/" class="header-nav-link">classes</a></li>
+        <li><a href="/staff" class="header-nav-link">staff portal</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<script>
+  document.querySelectorAll(".header-nav-link").forEach((link) => {
+    link.addEventListener("mouseover", () => (link.style.color = "#2DA7FB"));
+    link.addEventListener("mouseout", () => (link.style.color = "#474444"));
+  });
+</script>
