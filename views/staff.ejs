@@ -10,15 +10,27 @@
       <h1>Staff Interface</h1>
       <nav>
         <ul>
-          <li><button id="add-class-btn">Add New Class</button></li>
           <li><button id="search-classes-btn">Search Classes</button></li>
+          <li><button id="add-class-btn">Add New Class</button></li>
           <li><button id="update-class-btn">Update Class</button></li>
+          <li>
+            <button id="update-class-field-btn">Update Class Field</button>
+          </li>
         </ul>
       </nav>
     </header>
     <main>
       <section id="form-section">
-        <!-- Dynamic form content will be inserted here -->
+        <h2>Search Classes</h2>
+        <div id="search-bar">
+          <input type="text" id="query-field" placeholder="Search..." />
+          <select id="query-attribute">
+            <option value="class_name">Class Name</option>
+            <option value="instructor">Instructor</option>
+            <!-- Add more options as needed -->
+          </select>
+          <button id="search-button">Search</button>
+        </div>
       </section>
       <section id="results-section">
         <div id="query-results"></div>

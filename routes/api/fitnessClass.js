@@ -1,14 +1,45 @@
 const express = require("express");
 const router = express.Router();
 const fitnessClassDal = require("../../services/fitnessClass.dal");
+const staffDal = require("../../services/staff.dal");
 
 // GET all fitness classes
 router.get("/", async (req, res) => {
   const { month, year } = req.query;
-  console.log(`Received request for classes: month=${month}, year=${year}`);
+  if (month && year) {
+    // Fetch classes for the calendar
+    try {
+      const classes = await fitnessClassDal.getAllClasses(month, year);
+      res.json(classes);
+    } catch (err) {
+      console.error("Error fetching classes:", err);
+      res.status(503).json({ message: "Service Unavailable", status: 503 });
+    }
+  } else {
+    // Default to fetching all classes
+    try {
+      const classes = await fitnessClassDal.getAllClasses();
+      res.json(classes);
+    } catch (err) {
+      console.error("Error fetching classes:", err);
+      res.status(503).json({ message: "Service Unavailable", status: 503 });
+    }
+  }
+});
+
+// Search for fitness classes
+router.get("/search", async (req, res) => {
+  const { query, attribute } = req.query;
+  if (!query || !attribute) {
+    return res
+      .status(400)
+      .json({ message: "Query and attribute are required", status: 400 });
+  }
+  console.log(
+    `Received search request: query=${query}, attribute=${attribute}`
+  );
   try {
-    const classes = await fitnessClassDal.getAllClasses(month, year);
-    console.log("Classes fetched from database:", classes);
+    const classes = await staffDal.getClassesByQuery(query, attribute);
     res.json(classes);
   } catch (err) {
     console.error("Error fetching classes:", err);
@@ -16,132 +47,34 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET a single fitness class by ID
-router.get("/:id", async (req, res) => {
-  if (DEBUG) console.log("ROUTE: /api/fitness_classes/:id GET " + req.url);
-  try {
-    const fitnessClass = await fitnessClassDal.getClassById(req.params.id);
-    if (!fitnessClass) {
-      res.status(404).json({ message: "Not Found", status: 404 });
-    } else {
-      res.json(fitnessClass);
-    }
-  } catch (err) {
-    console.error("Error in GET /api/fitness_classes/:id:", err);
-    res.status(503).json({
-      message: "Service Unavailable",
-      status: 503,
-      error: err.message,
-    });
-  }
-});
-
-// POST create a new fitness class
+// Other routes for creating, updating, and patching classes using staffDal
 router.post("/", async (req, res) => {
-  if (DEBUG) console.log("ROUTE: /api/fitness_classes/ POST", req.body);
   try {
-    const newClass = req.body;
-
-    // Validate required fields
-    const requiredFields = [
-      "class_name",
-      "instructor",
-      "date",
-      "time",
-      "duration",
-      "details",
-      "class_type",
-    ];
-    const missingFields = requiredFields.filter((field) => !newClass[field]);
-    if (missingFields.length > 0) {
-      return res.status(400).json({
-        message: `Missing required fields: ${missingFields.join(", ")}`,
-        status: 400,
-      });
-    }
-
-    const createdClass = await fitnessClassDal.createClass(newClass);
-    console.log("Created class:", createdClass);
-    res
-      .status(201)
-      .json({ message: "Created", status: 201, data: createdClass });
+    const newClass = await staffDal.createClass(req.body);
+    res.status(201).json(newClass);
   } catch (err) {
-    console.error("Error in POST /api/fitness_classes:", err);
-    res.status(503).json({
-      message: "Service Unavailable",
-      status: 503,
-      error: err.message,
-    });
+    console.error("Error creating class:", err);
+    res.status(400).json({ message: "Bad Request", status: 400 });
   }
 });
 
-// PUT update a fitness class
 router.put("/:id", async (req, res) => {
-  if (DEBUG) console.log("ROUTE: /api/fitness_classes PUT " + req.params.id);
   try {
-    const updatedClass = req.body;
-    const result = await fitnessClassDal.updateClass(
-      req.params.id,
-      updatedClass
-    );
-    if (result) {
-      res.status(200).json({ message: "Updated", status: 200, data: result });
-    } else {
-      res.status(404).json({ message: "Not Found", status: 404 });
-    }
+    const updatedClass = await staffDal.updateClass(req.params.id, req.body);
+    res.json(updatedClass);
   } catch (err) {
-    console.error("Error in PUT /api/fitness_classes/:id:", err);
-    res.status(503).json({
-      message: "Service Unavailable",
-      status: 503,
-      error: err.message,
-    });
+    console.error("Error updating class:", err);
+    res.status(400).json({ message: "Bad Request", status: 400 });
   }
 });
 
-// PATCH partially update a fitness class
 router.patch("/:id", async (req, res) => {
-  if (DEBUG) console.log("ROUTE: /api/fitness_classes PATCH " + req.params.id);
   try {
-    const updatedFields = req.body;
-    const result = await fitnessClassDal.patchClass(
-      req.params.id,
-      updatedFields
-    );
-    if (result) {
-      res
-        .status(200)
-        .json({ message: "Partially Updated", status: 200, data: result });
-    } else {
-      res.status(404).json({ message: "Not Found", status: 404 });
-    }
+    const patchedClass = await staffDal.patchClass(req.params.id, req.body);
+    res.json(patchedClass);
   } catch (err) {
-    console.error("Error in PATCH /api/fitness_classes/:id:", err);
-    res.status(503).json({
-      message: "Service Unavailable",
-      status: 503,
-      error: err.message,
-    });
-  }
-});
-
-// DELETE a fitness class
-router.delete("/:id", async (req, res) => {
-  if (DEBUG) console.log("ROUTE: /api/fitness_classes DELETE " + req.params.id);
-  try {
-    const result = await fitnessClassDal.deleteClass(req.params.id);
-    if (result) {
-      res.status(200).json({ message: "Deleted", status: 200, data: result });
-    } else {
-      res.status(404).json({ message: "Not Found", status: 404 });
-    }
-  } catch (err) {
-    console.error("Error in DELETE /api/fitness_classes/:id:", err);
-    res.status(503).json({
-      message: "Service Unavailable",
-      status: 503,
-      error: err.message,
-    });
+    console.error("Error patching class:", err);
+    res.status(400).json({ message: "Bad Request", status: 400 });
   }
 });
 
