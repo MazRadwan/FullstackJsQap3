@@ -57,6 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document
       .getElementById("search-button")
       .addEventListener("click", async () => {
+        queryResults.innerHTML = ""; // Clear previous results
+        updateFieldSection.innerHTML = ""; // Clear update field section
+        updateFieldSection.style.display = "none"; // Hide update field section
         await queryClasses();
       });
   };
@@ -65,6 +68,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document
       .getElementById("update-field-search-button")
       .addEventListener("click", async () => {
+        queryResults.style.display = "none"; // Hide query results
+        queryResults.innerHTML = ""; // Clear query results
         await queryClassesForUpdateField();
       });
   };
@@ -406,19 +411,21 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("search-classes-btn")
     .addEventListener("click", () => {
       formSection.innerHTML = `
-          <h2>Search Classes</h2>
-          <div id="search-bar">
-            <input type="text" id="query-field" placeholder="Search...">
-            <select id="query-attribute">
-              <option value="class_name">Class Name</option>
-              <option value="instructor">Instructor</option>
-              <!-- Add more options as needed -->
-            </select>
-            <button id="search-button" class="update-button">Search</button>
-          </div>
-        `;
+      <h2>Search Classes</h2>
+      <div id="search-bar">
+        <input type="text" id="query-field" placeholder="Search...">
+        <select id="query-attribute">
+          <option value="class_name">Class Name</option>
+          <option value="instructor">Instructor</option>
+          <!-- Add more options as needed -->
+        </select>
+        <button id="search-button" class="update-button">Search</button>
+      </div>
+    `;
       queryResults.style.display = "none"; // Hide results section initially
       queryResults.innerHTML = ""; // Clear query results
+      updateFieldSection.style.display = "none"; // Hide update field section
+      updateFieldSection.innerHTML = ""; // Clear update field section
       setupQueryForm();
     });
 
@@ -465,26 +472,30 @@ document.addEventListener("DOMContentLoaded", () => {
             <button type="submit" class="update-button">Submit</button>
           </form>
         `;
-    queryResults.style.display = "none"; // Hide results section initially
+    queryResults.style.display = "none"; // Hide results section
     queryResults.innerHTML = ""; // Clear query results
+    updateFieldSection.style.display = "none"; // Hide update field section
+    updateFieldSection.innerHTML = ""; // Clear update field section
     setupFormSubmit("POST");
   });
 
   document.getElementById("update-class-btn").addEventListener("click", () => {
     formSection.innerHTML = `
-          <h2>Search Class to Update</h2>
-          <div id="search-bar">
-            <input type="text" id="query-field" placeholder="Search...">
-            <select id="query-attribute">
-              <option value="class_name">Class Name</option>
-              <option value="instructor">Instructor</option>
-              <!-- Add more options as needed -->
-            </select>
-            <button id="search-button" class="update-button">Search</button>
-          </div>
-        `;
+      <h2>Search Class to Update</h2>
+      <div id="search-bar">
+        <input type="text" id="query-field" placeholder="Search...">
+        <select id="query-attribute">
+          <option value="class_name">Class Name</option>
+          <option value="instructor">Instructor</option>
+          <!-- Add more options as needed -->
+        </select>
+        <button id="search-button" class="update-button">Search</button>
+      </div>
+    `;
     queryResults.style.display = "none"; // Hide results section initially
     queryResults.innerHTML = ""; // Clear query results
+    updateFieldSection.style.display = "none"; // Hide update field section
+    updateFieldSection.innerHTML = ""; // Clear update field section
     setupQueryForm();
   });
 
@@ -492,19 +503,21 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("update-class-field-btn")
     .addEventListener("click", () => {
       formSection.innerHTML = `
-        <h2>Search Class to Update Field</h2>
-        <div id="update-field-search-bar">
-          <input type="text" id="update-field-query" placeholder="Search...">
-          <select id="update-field-attribute">
-            <option value="class_name">Class Name</option>
-            <option value="instructor">Instructor</option>
-            <!-- Add more options as needed -->
-          </select>
-          <button id="update-field-search-button" class="update-button">Search</button>
-        </div>
-      `;
+      <h2>Search Class to Update Field</h2>
+      <div id="update-field-search-bar">
+        <input type="text" id="update-field-query" placeholder="Search...">
+        <select id="update-field-attribute">
+          <option value="class_name">Class Name</option>
+          <option value="instructor">Instructor</option>
+          <!-- Add more options as needed -->
+        </select>
+        <button id="update-field-search-button" class="update-button">Search</button>
+      </div>
+    `;
       updateFieldSection.style.display = "none"; // Hide update field section initially
       updateFieldSection.innerHTML = ""; // Clear update field section
+      queryResults.style.display = "none"; // Hide query results
+      queryResults.innerHTML = ""; // Clear query results
       setupUpdateFieldQueryForm();
     });
 

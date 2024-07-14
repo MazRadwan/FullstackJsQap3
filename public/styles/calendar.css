@@ -47,11 +47,13 @@ header {
 
 #month-year {
   font-size: 1.5em;
+  color: #3e7b9c;
 }
 
 .weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  color: #386f8a;
 }
 
 .weekdays div {
@@ -75,6 +77,7 @@ header {
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
+  color: #27485a;
 }
 
 .days div:hover {
@@ -152,8 +155,23 @@ header {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
+  border-radius: 8px;
   width: 80%; /* Could be more or less, depending on screen size */
   animation: zoomIn 0.1s ease-out;
+}
+
+#modal-class-name {
+  color: #386f8a;
+}
+#modal-instructor {
+  color: #386f8a;
+}
+
+#modal-duration {
+  color: #386f8a;
+}
+#modal-details {
+  color: #386f8a;
 }
 
 .close {
