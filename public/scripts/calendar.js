@@ -74,6 +74,13 @@ document.addEventListener("DOMContentLoaded", () => {
         (wc) => formatDate(wc.date) === dateStr
       );
 
+      // Sort classes by time
+      workoutClassesForDay.sort((a, b) => {
+        const timeA = a.time.split(":").map(Number);
+        const timeB = b.time.split(":").map(Number);
+        return timeA[0] - timeB[0] || timeA[1] - timeB[1];
+      });
+
       let dayHTML = `<div>${day}`;
       workoutClassesForDay.slice(0, 4).forEach((workout) => {
         dayHTML += `
