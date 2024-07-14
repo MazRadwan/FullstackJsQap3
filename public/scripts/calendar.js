@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const fetchClasses = async (month, year) => {
     try {
-      console.log(`Fetching classes for ${month}/${year}`);
       const timestamp = new Date().getTime();
       const res = await fetch(
         `/api/fitness_classes?month=${month}&year=${year}&_=${timestamp}`
@@ -22,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
       }
       const data = await res.json();
-      console.log("Fetched classes:", data);
       return data;
     } catch (error) {
       console.error("Error fetching classes:", error);
@@ -30,11 +28,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  const formatTime = (timeString) => {
+    const [hours, minutes, seconds] = timeString.split(":").map(Number);
+    let period = "AM";
+    let hoursFormatted = hours;
+
+    if (hours >= 12) {
+      period = "PM";
+      if (hours > 12) {
+        hoursFormatted = hours - 12;
+      }
+    } else if (hours === 0) {
+      hoursFormatted = 12;
+    }
+
+    return `${hoursFormatted}:${String(minutes).padStart(2, "0")} ${period}`;
+  };
+
   const renderCalendar = async () => {
     const month = currentDate.getMonth();
     const year = currentDate.getFullYear();
-
-    console.log(`Rendering calendar for ${month + 1}/${year}`);
 
     monthYear.textContent = `${currentDate.toLocaleString("default", {
       month: "long",
@@ -45,49 +58,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const firstDayOfMonth = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    console.log(
-      `First day of month: ${firstDayOfMonth}, Days in month: ${daysInMonth}`
-    );
-
+    // Add empty cells for days before the 1st of the month
     for (let i = 0; i < firstDayOfMonth; i++) {
       daysContainer.innerHTML += "<div></div>";
     }
 
     const classes = await fetchClasses(month + 1, year);
-    console.log("Classes fetched for rendering:", classes);
 
-    if (classes.length === 0) {
-      console.log("No classes found for this month and year");
-    } else {
-      console.log("Sample class:", classes[0]);
-    }
-
+    // Add cells for each day of the month
     for (let day = 1; day <= daysInMonth; day++) {
       const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(
         day
       ).padStart(2, "0")}`;
-      console.log(`Processing date: ${dateStr}`);
-
-      const workoutClassesForDay = classes.filter((wc) => {
-        const formattedDate = formatDate(wc.date);
-        console.log(`Comparing: ${formattedDate} with ${dateStr}`);
-        return formattedDate === dateStr;
-      });
-      console.log(`Classes for ${dateStr}:`, workoutClassesForDay);
+      const workoutClassesForDay = classes.filter(
+        (wc) => formatDate(wc.date) === dateStr
+      );
 
       let dayHTML = `<div>${day}`;
       workoutClassesForDay.slice(0, 4).forEach((workout) => {
-        console.log(`Adding workout to calendar: ${workout.class_name}`);
         dayHTML += `
           <div class="workout ${workout.class_type.toLowerCase()}" 
-               title="${workout.class_name} - ${workout.time}"
+               title="${workout.class_name} - ${formatTime(workout.time)}"
                data-name="${workout.class_name}" 
                data-instructor="${workout.instructor}" 
                data-duration="${workout.duration}" 
                data-details="${workout.details}"
-               data-time="${workout.time}">
-
-            ${workout.class_name} - ${workout.time}
+               data-time="${formatTime(workout.time)}">
+            ${workout.class_name} - ${formatTime(workout.time)}
           </div>`;
       });
       if (workoutClassesForDay.length > 4) {
@@ -99,7 +96,13 @@ document.addEventListener("DOMContentLoaded", () => {
       daysContainer.innerHTML += dayHTML;
     }
 
-    console.log("Calendar rendering complete");
+    // Fill the remaining cells to complete the last row if necessary
+    const totalCells = firstDayOfMonth + daysInMonth;
+    const remainingCells = (7 - (totalCells % 7)) % 7;
+    for (let i = 0; i < remainingCells; i++) {
+      daysContainer.innerHTML += "<div></div>";
+    }
+
     addWorkoutEventListeners();
   };
 
@@ -114,8 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const addWorkoutEventListeners = () => {
     document.querySelectorAll(".workout").forEach((item) => {
       item.addEventListener("click", function () {
-        console.log("Workout clicked:", this.getAttribute("data-name"));
-
         const name = this.getAttribute("data-name");
         const instructor = this.getAttribute("data-instructor");
         const duration = this.getAttribute("data-duration");

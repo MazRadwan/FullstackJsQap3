@@ -13,12 +13,14 @@ header {
 }
 
 #calendar {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 20px auto;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 .header {
@@ -44,24 +46,27 @@ header {
   font-size: 1.5em;
 }
 
-.weekdays,
-.days {
-  display: flex;
-  flex-wrap: wrap;
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 }
 
-.weekdays div,
-.days div {
-  width: calc(100% / 7);
+.weekdays div {
   text-align: center;
   padding: 10px 0;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0px;
 }
 
 .days div {
   border: 1px solid #ddd;
   cursor: pointer;
   position: relative;
-  height: 100px; /* Fixed height */
+  height: 150px; /* Fixed height */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,6 +88,7 @@ header {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 20px; /* Fixed height for each workout entry */
 }
 
 .days .workout.yoga {
@@ -120,6 +126,8 @@ header {
   border-color: #f8d7da;
 }
 
+/* Modal styles remain unchanged */
+
 /* Existing styles */
 
 .modal {
@@ -133,7 +141,7 @@ header {
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0, 0, 0); /* Fallback color */
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.1s ease-out;
 }
 
 .modal-content {
@@ -142,7 +150,7 @@ header {
   padding: 20px;
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
-  animation: zoomIn 0.3s ease-out;
+  animation: zoomIn 0.1s ease-out;
 }
 
 .close {
