@@ -1,5 +1,19 @@
 const pool = require("./db");
 
+const getClassById = function (id) {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM fitness_class WHERE id = $1";
+    pool.query(sql, [id], (err, result) => {
+      if (err) {
+        console.error("Database query error:", err);
+        reject(err);
+      } else {
+        resolve(result.rows[0]);
+      }
+    });
+  });
+};
+
 const getClassesByQuery = function (query, attribute) {
   return new Promise((resolve, reject) => {
     const sql = `SELECT * FROM fitness_class WHERE ${attribute} ILIKE $1`;
@@ -106,6 +120,7 @@ const patchClass = function (id, updatedFields) {
 };
 
 module.exports = {
+  getClassById,
   getClassesByQuery,
   createClass,
   updateClass,

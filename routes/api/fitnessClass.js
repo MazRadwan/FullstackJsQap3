@@ -47,6 +47,17 @@ router.get("/search", async (req, res) => {
   }
 });
 
+// Fetch a specific class by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const classData = await staffDal.getClassById(req.params.id);
+    res.json(classData);
+  } catch (err) {
+    console.error("Error fetching class:", err);
+    res.status(404).json({ message: "Class not found", status: 404 });
+  }
+});
+
 // Other routes for creating, updating, and patching classes using staffDal
 router.post("/", async (req, res) => {
   try {
