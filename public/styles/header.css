@@ -3,6 +3,10 @@
 .header-container {
   background-color: rgba(227, 227, 223, 0.53);
   padding: 10px;
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .header-content {

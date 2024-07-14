@@ -23,7 +23,7 @@ nav ul {
 }
 
 nav button {
-  background-color: #2196f3;
+  background-color: #2da7fb;
   border: none;
   color: white;
   padding: 10px 20px;
@@ -150,7 +150,7 @@ nav button:hover {
 }
 
 .query-result-item button.update-button {
-  background-color: #ff5252;
+  background-color: #60d599;
   border: none;
   color: white;
   padding: 10px 20px;
@@ -165,7 +165,7 @@ nav button:hover {
 }
 
 .query-result-item button.update-button:hover {
-  background-color: #e04848;
+  background-color: #306a4c;
 }
 
 /* Form Styles */
