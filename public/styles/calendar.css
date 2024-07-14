@@ -168,6 +168,22 @@ header {
   text-decoration: none;
   cursor: pointer;
 }
+#fitness-schedule {
+  text-align: center;
+  margin: 20px 0;
+}
+
+#fitness-schedule h1 {
+  font-family: "Jura", sans-serif;
+  font-size: 2.5em;
+  color: #2da7fb;
+}
+
+#fitness-schedule h2 {
+  font-family: "Jura", sans-serif;
+  font-size: 1.2em;
+  color: #474444;
+}
 
 @keyframes fadeIn {
   from {
