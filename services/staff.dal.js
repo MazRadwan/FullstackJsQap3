@@ -119,10 +119,34 @@ const patchClass = function (id, updatedFields) {
   });
 };
 
+const deleteClass = function (id) {
+  return new Promise((resolve, reject) => {
+    const sql = "DELETE FROM fitness_class WHERE id = $1 RETURNING *";
+    pool.query(sql, [id], (err, result) => {
+      if (err) {
+        console.error("Error in deleteClass:", err);
+        reject(err);
+      } else {
+        if (result.rows.length === 0) {
+          console.log(`No class found with id ${id} to delete.`);
+          resolve(null); // No class found with this id
+        } else {
+          console.log(
+            `Successfully deleted class with id ${id}:`,
+            result.rows[0]
+          );
+          resolve(result.rows[0]); // Return the deleted class data
+        }
+      }
+    });
+  });
+};
+
 module.exports = {
   getClassById,
   getClassesByQuery,
   createClass,
   updateClass,
   patchClass,
+  deleteClass,
 };
