@@ -143,20 +143,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setupUpdateClassFieldForm() {
     formSection.innerHTML = `
-          <h2>Search Class to Update Field</h2>
-          <div id="update-field-search-bar">
-            <input type="text" id="update-field-query" placeholder="Search...">
-            <select id="update-field-attribute">
-              <option value="class_name">Class Name</option>
-              <option value="instructor">Instructor</option>
-            </select>
-            <button id="update-field-search-button" class="update-button">Search</button>
-          </div>
-        `;
-    updateFieldSection.style.display = "none";
-    updateFieldSection.innerHTML = "";
-    queryResults.style.display = "none";
-    queryResults.innerHTML = "";
+      <h2>Search Class to Update Field</h2>
+      <div id="update-field-search-bar">
+        <input type="text" id="update-field-query" placeholder="Search...">
+        <select id="update-field-attribute">
+          <option value="class_name">Class Name</option>
+          <option value="instructor">Instructor</option>
+        </select>
+        <button id="update-field-search-button" class="update-button">Search</button>
+      </div>
+    `;
+    clearAndHideSections();
     setupUpdateFieldQueryForm();
   }
 
@@ -611,17 +608,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       if (res.ok) {
         alert("Field updated successfully!");
-        updateFieldSection.innerHTML = ""; // Clear update field section
 
-        // Define deleteClassSection at the top of your script
-        const deleteClassSection = document.getElementById(
-          "delete-class-section"
-        );
+        // Clear and hide the sections
+        clearAndHideSections();
 
-        // Ensure deleteClassSection exists before referencing it
-        if (deleteClassSection) {
-          deleteClassSection.style.display = "none"; // Hide delete class section
-        }
+        // Optionally, reset the form to its initial state
+        setupUpdateClassFieldForm();
       } else {
         alert("Error: " + (data.message || "Unknown error occurred"));
       }
@@ -629,6 +621,22 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error updating field:", error);
       alert("An error occurred. Please check the console for details.");
     }
+  }
+
+  // Add this new function to clear and hide sections
+  function clearAndHideSections() {
+    const sectionsToReset = [
+      "results-section",
+      "update-field-section",
+      "delete-class-section",
+    ];
+    sectionsToReset.forEach((sectionId) => {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.innerHTML = "";
+        section.style.display = "none";
+      }
+    });
   }
 
   // Utility functions to format date and time
@@ -656,7 +664,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return `${hoursFormatted}:${String(minutes).padStart(2, "0")} ${period}`;
   }
+  // Initial load of classes
+  queryClasses();
+  setupSearchClassesForm();
 });
-// Initial load of classes
-queryClasses();
-setupSearchClassesForm();
