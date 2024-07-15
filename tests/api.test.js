@@ -1,5 +1,5 @@
 const request = require("supertest"); // using supertest to test the API
-const app = require("../index"); // Your Express app
+const app = require("../index");
 
 // as a business partner i want to be able to fetch the fitness classes via api
 
