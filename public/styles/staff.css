@@ -277,7 +277,39 @@ nav button:hover {
   background-color: #0b7dda;
 }
 
-Style for the main delete class button */ #delete-class-btn {
+.update-field-form {
+  margin-top: 20px;
+}
+
+.update-field-form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.update-field-form input,
+.update-field-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.update-field-form button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.update-field-form button:hover {
+  background-color: #45a049;
+}
+
+#delete-class-btn {
   background-color: #dc3545;
 }
 
@@ -304,6 +336,7 @@ Style for the main delete class button */ #delete-class-btn {
   border-radius: 12px;
   width: 50%;
   position: relative;
+  top: 200px;
 }
 
 .modal-footer {
@@ -330,4 +363,36 @@ Style for the main delete class button */ #delete-class-btn {
   color: white;
   border-radius: 8px;
   border: none;
+}
+/* Update field section styling */
+#update-field-section div {
+  margin-bottom: 15px;
+}
+
+#update-field-section label {
+  font-weight: bold;
+}
+
+#update-field-section input[type="text"],
+#update-field-section input[type="date"],
+#update-field-section input[type="time"],
+#update-field-section input[type="number"],
+#update-field-section select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+#update-field-section button.update-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#update-field-section button.update-button:hover {
+  background-color: #218838;
 }

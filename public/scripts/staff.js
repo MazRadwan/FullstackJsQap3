@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const formSection = document.getElementById("form-section");
   const queryResults = document.getElementById("results-section");
   const updateFieldSection = document.getElementById("update-field-section");
+  const deleteClassSection = document.getElementById("delete-class-section");
   let classIdToDelete = null;
 
   // Modal elements
@@ -490,31 +491,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.selectFieldToUpdate = (id) => {
     console.log("selectFieldToUpdate called with id:", id); // Debug log
-    // Store the selected class ID
-    const selectedClassId = id;
-    // Display the dropdown menu for selecting the field to update
-    updateFieldSection.innerHTML = `
-        <div>
-          <label for="field-select">Select Field to Update:</label>
-          <select id="field-select">
-            <option value="class_name">Class Name</option>
-            <option value="instructor">Instructor</option>
-            <option value="date">Date</option>
-            <option value="time">Time</option>
-            <option value="duration">Duration</option>
-            <option value="details">Details</option>
-            <option value="class_type">Class Type</option>
-          </select>
-          <button id="field-select-button" class="update-button">Select</button>
-        </div>
-        <div id="update-field-input"></div>
-      `;
-    document
-      .getElementById("field-select-button")
-      .addEventListener("click", () => {
-        const selectedField = document.getElementById("field-select").value;
-        console.log("Field selected:", selectedField); // Debug log
-        displayFieldInput(selectedClassId, selectedField);
+    // Fetch the selected class details to display a summary
+    fetch(`/api/fitness_classes/${id}`)
+      .then((response) => response.json())
+      .then((classData) => {
+        // Display the summary and field selection input
+        queryResults.innerHTML = ""; // Clear query results
+        updateFieldSection.innerHTML = `
+                <div class="class-summary">
+                    <h3>${
+                      classData.class_name
+                    } <span class="badge ${classData.class_type.toLowerCase()}">${
+          classData.class_type
+        }</span></h3>
+                    <p><strong>Instructor:</strong> ${classData.instructor}</p>
+                    <p><strong>Date:</strong> ${formatDate(classData.date)}</p>
+                    <p><strong>Time:</strong> ${formatTime(classData.time)}</p>
+                    <p><strong>Duration:</strong> ${
+                      classData.duration
+                    } minutes</p>
+                    <p><strong>Details:</strong> ${classData.details}</p>
+                </div>
+                <div>
+                  <label for="field-select">Select Field to Update:</label>
+                  <select id="field-select">
+                    <option value="class_name">Class Name</option>
+                    <option value="instructor">Instructor</option>
+                    <option value="date">Date</option>
+                    <option value="time">Time</option>
+                    <option value="duration">Duration</option>
+                    <option value="details">Details</option>
+                    <option value="class_type">Class Type</option>
+                  </select>
+                  <button id="field-select-button" class="update-button">Select</button>
+                </div>
+                <div id="update-field-input"></div>
+            `;
+        updateFieldSection.style.display = "block"; // Ensure the section is visible
+        document
+          .getElementById("field-select-button")
+          .addEventListener("click", () => {
+            const selectedField = document.getElementById("field-select").value;
+            console.log("Field selected:", selectedField); // Debug log
+            displayFieldInput(id, selectedField);
+          });
+      })
+      .catch((error) => {
+        console.error("Error fetching class data:", error);
       });
   };
 
@@ -543,27 +566,27 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
       case "class_type":
         inputField = `
-            <select id="field-input" name="${field}" required>
-              <option value="Yoga">Yoga</option>
-              <option value="Pilates">Pilates</option>
-              <option value="Spinning">Spinning</option>
-              <option value="CrossFit">CrossFit</option>
-              <option value="Aerobics">Aerobics</option>
-              <option value="Zumba">Zumba</option>
-              <option value="Boxing">Boxing</option>
-            </select>
-          `;
+                <select id="field-input" name="${field}" required>
+                  <option value="Yoga">Yoga</option>
+                  <option value="Pilates">Pilates</option>
+                  <option value="Spinning">Spinning</option>
+                  <option value="CrossFit">CrossFit</option>
+                  <option value="Aerobics">Aerobics</option>
+                  <option value="Zumba">Zumba</option>
+                  <option value="Boxing">Boxing</option>
+                </select>
+            `;
         break;
       default:
         inputField = `<input type="text" id="field-input" name="${field}" required>`;
     }
     updateFieldSection.innerHTML += `
-        <div>
+        <div class="update-field-form">
           <label for="field-input">New ${field.replace("_", " ")}:</label>
           ${inputField}
           <button id="update-field-button" class="update-button">Update</button>
         </div>
-      `;
+    `;
     document
       .getElementById("update-field-button")
       .addEventListener("click", () => {
@@ -573,6 +596,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function updateClassField(classId, field) {
+    console.log("Update button clicked");
     const newValue = document.getElementById("field-input").value;
     const updatedField = {};
     updatedField[field] = newValue;
@@ -587,7 +611,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       if (res.ok) {
         alert("Field updated successfully!");
-        updateFieldSection.innerHTML = "";
+        updateFieldSection.innerHTML = ""; // Clear update field section
+
+        // Define deleteClassSection at the top of your script
+        const deleteClassSection = document.getElementById(
+          "delete-class-section"
+        );
+
+        // Ensure deleteClassSection exists before referencing it
+        if (deleteClassSection) {
+          deleteClassSection.style.display = "none"; // Hide delete class section
+        }
       } else {
         alert("Error: " + (data.message || "Unknown error occurred"));
       }
@@ -622,8 +656,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return `${hoursFormatted}:${String(minutes).padStart(2, "0")} ${period}`;
   }
-
-  // Initial load of classes
-  queryClasses();
-  setupSearchClassesForm();
 });
+// Initial load of classes
+queryClasses();
+setupSearchClassesForm();
