@@ -45,23 +45,30 @@ document.addEventListener("DOMContentLoaded", () => {
       .addEventListener("click", () => queryClasses("delete"));
   }
 
+  // Function to set up the search form
   function setupSearchClassesForm() {
     formSection.innerHTML = `
-        <h2>Search Classes</h2>
-        <div id="search-bar">
-          <input type="text" id="query-field" placeholder="Search...">
-          <select id="query-attribute">
-            <option value="class_name">Class Name</option>
-            <option value="instructor">Instructor</option>
-          </select>
-          <button id="search-button" class="update-button">Search</button>
-        </div>
-      `;
+      <h2>Search Classes</h2>
+      <div id="search-bar">
+        <input type="text" id="query-field" placeholder="Search...">
+        <select id="query-attribute">
+          <option value="class_name">Class Name</option>
+          <option value="instructor">Instructor</option>
+        </select>
+        <button id="search-button" class="update-button">Search</button>
+      </div>
+    `;
     queryResults.style.display = "none";
     queryResults.innerHTML = "";
     updateFieldSection.style.display = "none";
     updateFieldSection.innerHTML = "";
-    setupQueryForm();
+
+    document
+      .getElementById("search-button")
+      .addEventListener("click", async () => {
+        queryResults.innerHTML = "";
+        await queryClasses();
+      });
   }
 
   function setupAddClassForm() {
@@ -597,4 +604,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initial load of classes
   queryClasses();
+  setupSearchClassesForm();
 });
