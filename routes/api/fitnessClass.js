@@ -39,7 +39,7 @@ router.get("/search", async (req, res) => {
     `Received search request: query=${query}, attribute=${attribute}`
   );
   try {
-    const classes = await staffDal.getClassesByQuery(query, attribute);
+    const classes = await fitnessClassDal.getClassesByQuery(query, attribute); // Update this line
     res.json(classes);
   } catch (err) {
     console.error("Error fetching classes:", err);
@@ -58,7 +58,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Other routes for creating, updating, and patching classes using staffDal
+// Create a new class
 router.post("/", async (req, res) => {
   try {
     const newClass = await staffDal.createClass(req.body);
@@ -68,6 +68,8 @@ router.post("/", async (req, res) => {
     res.status(400).json({ message: "Bad Request", status: 400 });
   }
 });
+
+// Update a class
 
 router.put("/:id", async (req, res) => {
   try {
@@ -86,6 +88,39 @@ router.patch("/:id", async (req, res) => {
   } catch (err) {
     console.error("Error patching class:", err);
     res.status(400).json({ message: "Bad Request", status: 400 });
+  }
+});
+
+// DELETE a class
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedClass = await fitnessClassDal.deleteClass(id);
+    if (deletedClass) {
+      res.json(deletedClass);
+    } else {
+      res.status(404).json({ message: "Class not found", status: 404 });
+    }
+  } catch (err) {
+    console.error("Error deleting class:", err);
+    res.status(503).json({ message: "Service Unavailable", status: 503 });
+  }
+});
+
+// Search for fitness classes
+router.get("/search", async (req, res) => {
+  const { query, attribute } = req.query;
+  if (!query || !attribute) {
+    return res
+      .status(400)
+      .json({ message: "Query and attribute are required", status: 400 });
+  }
+  try {
+    const classes = await fitnessClassDal.getClassesByQuery(query, attribute);
+    res.json(classes);
+  } catch (err) {
+    console.error("Error fetching classes:", err);
+    res.status(503).json({ message: "Service Unavailable", status: 503 });
   }
 });
 

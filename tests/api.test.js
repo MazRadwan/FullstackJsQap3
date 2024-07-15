@@ -1,17 +1,17 @@
-const request = require("supertest"); // using supertest to test the API
+const request = require("supertest"); // using supertest to test the /api
 const app = require("../index");
 
-// as a business partner i want to be able to fetch the fitness classes via api
+// as a business partner i want to be able to fetch the fitness classes via /api
 
-describe("API Endpoints", () => {
-  test("GET /fitness_classes", async () => {
-    const res = await request(app).get("/fitness_classes");
+describe("/api Endpoints", () => {
+  test("GET /api/fitness_classes", async () => {
+    const res = await request(app).get("/api/fitness_classes");
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("length");
   });
 
-  test("POST /fitness_classes", async () => {
-    const res = await request(app).post("/fitness_classes").send({
+  test("POST /api/fitness_classes", async () => {
+    const res = await request(app).post("/api/fitness_classes").send({
       class_name: "Pilates",
       instructor: "Bob",
       date: "2024-07-11",
@@ -24,14 +24,14 @@ describe("API Endpoints", () => {
     expect(res.body).toHaveProperty("id");
   });
 
-  test("GET /fitness_classes/:id", async () => {
-    const res = await request(app).get("/fitness_classes/1");
+  test("GET /api/fitness_classes/:id", async () => {
+    const res = await request(app).get("/api/fitness_classes/1");
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("id");
   });
 
-  test("PUT /fitness_classes/:id", async () => {
-    const res = await request(app).put("/fitness_classes/1").send({
+  test("PUT /api/fitness_classes/:id", async () => {
+    const res = await request(app).put("/api/fitness_classes/1").send({
       class_name: "Advanced Pilates",
       instructor: "Bob",
       date: "2024-07-11",
@@ -44,16 +44,16 @@ describe("API Endpoints", () => {
     expect(res.body.class_name).toBe("Advanced Pilates");
   });
 
-  test("PATCH /fitness_classes/:id", async () => {
+  test("PATCH /api/fitness_classes/:id", async () => {
     const res = await request(app)
-      .patch("/fitness_classes/1")
+      .patch("/api/fitness_classes/1")
       .send({ class_name: "Pilates" });
     expect(res.statusCode).toEqual(200);
     expect(res.body.class_name).toBe("Pilates");
   });
 
-  test("DELETE /fitness_classes/:id", async () => {
-    const res = await request(app).delete("/fitness_classes/1");
+  test("DELETE /api/fitness_classes/:id", async () => {
+    const res = await request(app).delete("/api/fitness_classes/1");
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("id");
   });
