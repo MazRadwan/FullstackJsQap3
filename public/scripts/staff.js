@@ -623,7 +623,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Add this new function to clear and hide sections
+  // function to clear and hide sections
   function clearAndHideSections() {
     const sectionsToReset = [
       "results-section",
