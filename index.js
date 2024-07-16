@@ -43,7 +43,7 @@ app.use((req, res, next) => {
     "404",
     `Route not found: ${req.method} ${req.originalUrl}`
   );
-  res.status(404).render("404", { url: req.originalUrl });
+  res.status(404).json({ message: "Route not found", status: 404 });
 });
 
 // Error Handling Middleware - This should be the last middleware

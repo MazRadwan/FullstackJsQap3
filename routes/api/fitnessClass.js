@@ -4,6 +4,12 @@ const fitnessClassDal = require("../../services/fitnessClass.dal");
 const staffDal = require("../../services/staff.dal");
 const myEmitter = require("../../utils/logEvents");
 
+// Route to simulate a database connection error
+router.get("/simulate-db-error", (req, res) => {
+  console.error("Simulated database connection error");
+  res.status(503).json({ message: "Service Unavailable", status: 503 });
+});
+
 // GET all fitness classes
 router.get("/", async (req, res) => {
   if (DEBUG) console.log("GET /fitness_classes");
@@ -97,7 +103,6 @@ router.post("/", async (req, res) => {
 });
 
 // Update a class
-
 router.put("/:id", async (req, res) => {
   try {
     const updatedClass = await staffDal.updateClass(req.params.id, req.body);
@@ -118,6 +123,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// Patch a class
 router.patch("/:id", async (req, res) => {
   try {
     const patchedClass = await staffDal.patchClass(req.params.id, req.body);
@@ -155,24 +161,6 @@ router.delete("/:id", async (req, res) => {
     console.error("Error deleting class:", err);
     res.status(503).json({ message: "Service Unavailable", status: 503 });
     myEmitter.emit("error", "deleteClass", `DELETE /fitness_classes/${id}`);
-  }
-});
-
-// Search for fitness classes
-router.get("/search", async (req, res) => {
-  const { query, attribute } = req.query;
-  if (!query || !attribute) {
-    return res
-      .status(400)
-      .json({ message: "Query and attribute are required", status: 400 });
-  }
-  try {
-    const classes = await fitnessClassDal.getClassesByQuery(query, attribute);
-    res.json(classes);
-  } catch (err) {
-    console.error("Error fetching classes:", err);
-    res.status(503).json({ message: "Service Unavailable", status: 503 });
-    myEmitter.emit("error", "getClassesByQuery", "GET /fitness_classes/search");
   }
 });
 
