@@ -97,7 +97,11 @@ router.post("/", async (req, res) => {
     myEmitter.emit("log", "createClass", "POST /fitness_classes");
   } catch (err) {
     console.error("Error creating class:", err);
-    res.status(400).json({ message: "Bad Request", status: 400 });
+    if (err.message === "Missing required fields") {
+      res.status(400).json({ message: "Bad Request", status: 400 });
+    } else {
+      res.status(400).json({ message: "Bad Request", status: 400 });
+    }
     myEmitter.emit("error", "createClass", "POST /fitness_classes");
   }
 });
