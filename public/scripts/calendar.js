@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const calendar = document.getElementById("calendar");
   const monthYear = document.getElementById("month-year");
   const daysContainer = document.getElementById("days");
   const prevButton = document.getElementById("prev");

@@ -1,4 +1,4 @@
-CREATE TABLE fitness_classes (
+CREATE TABLE fitness_class (
     id SERIAL PRIMARY KEY,
     class_name VARCHAR(255) NOT NULL,
     instructor VARCHAR(255) NOT NULL,
