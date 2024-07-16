@@ -1,15 +1,13 @@
 const request = require("supertest");
 const app = require("../index"); // Your Express app
 
-//as a dev , i want to test scenarios such as database connection errors, non-existent routes, and invalid input data.
-
 describe("Error Handling", () => {
   test("Handles database connection errors gracefully", async () => {
     // Simulate a database connection error
     jest.spyOn(global.console, "error").mockImplementation(() => {});
     const res = await request(app).get("/simulate-db-error"); // Route to simulate error
-    expect(res.statusCode).toEqual(500);
-    expect(res.body).toHaveProperty("message", "Internal Server Error");
+    expect(res.statusCode).toEqual(503);
+    expect(res.body).toHaveProperty("message", "Service Unavailable");
     console.error.mockRestore();
   });
 
@@ -30,6 +28,27 @@ describe("Error Handling", () => {
       class_type: "Pilates",
     });
     expect(res.statusCode).toEqual(400);
-    expect(res.body).toHaveProperty("errors");
+    expect(res.body).toHaveProperty("message", "Bad Request");
+  });
+
+  test("Handles missing query or attribute parameters", async () => {
+    const res = await request(app).get("/fitness_classes/search").query({});
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toHaveProperty(
+      "message",
+      "Query and attribute are required"
+    );
+  });
+
+  test("Handles non-existent class ID", async () => {
+    const res = await request(app).get("/fitness_classes/9999");
+    expect(res.statusCode).toEqual(404);
+    expect(res.body).toHaveProperty("message", "Class not found");
+  });
+
+  test("Handles error when deleting non-existent class ID", async () => {
+    const res = await request(app).delete("/fitness_classes/9999");
+    expect(res.statusCode).toEqual(404);
+    expect(res.body).toHaveProperty("message", "Class not found");
   });
 });
