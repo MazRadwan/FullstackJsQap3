@@ -98,7 +98,7 @@ describe("UI Tests", () => {
       await page.click('button[type="submit"]');
       console.log("Clicked submit button");
 
-      // Add a delay to ensure the form has time to reset
+      //delay to ensure the form has time to reset
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Verify that the form has been reset (indicating successful submission)
