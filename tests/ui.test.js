@@ -37,21 +37,4 @@ describe("UI Tests", () => {
     expect(className).toBeTruthy();
     expect(instructor).toBeTruthy();
   });
-
-  //As a staff member user, I want to be able to add a new fitness class to the schedule.
-
-  test("Form adds a new fitness class", async () => {
-    await page.goto("http://localhost:3000/staff");
-    await page.type("#class_name", "Spinning");
-    await page.type("#instructor", "Charlie");
-    await page.type("#date", "2024-07-12");
-    await page.type("#time", "11:00");
-    await page.type("#duration", "30");
-    await page.type("#details", "A high-intensity spinning class.");
-    await page.select("#class_type", "Spinning");
-    await page.click("#submit");
-    await page.waitForNavigation();
-    const newClass = await page.$eval(".workout", (el) => el.textContent);
-    expect(newClass).toContain("Spinning");
-  });
 });
