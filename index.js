@@ -20,6 +20,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.json());
+app.get("/favicon.ico", (req, res) => res.status(204));
 
 // Set EJS as the templating engine
 app.set("view engine", "ejs");
