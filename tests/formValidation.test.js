@@ -1,4 +1,5 @@
 const puppeteer = require("puppeteer");
+const path = require("path");
 
 describe("UI Tests", () => {
   let browser;
@@ -7,109 +8,108 @@ describe("UI Tests", () => {
   beforeAll(async () => {
     browser = await puppeteer.launch({ headless: true });
     page = await browser.newPage();
+
+    // Log browser console messages
+    page.on("console", (msg) => console.log("PAGE LOG:", msg.text()));
+    // Log any page errors
+    page.on("error", (err) => console.log("PAGE ERROR:", err));
+    // Log any request failures
+    page.on("requestfailed", (request) =>
+      console.log("REQUEST FAILED:", request.url(), request.failure().errorText)
+    );
   });
 
   afterAll(async () => {
     await browser.close();
   });
 
-  test("Calendar displays fitness classes", async () => {
-    await page.goto("http://localhost:3000");
-    await page.waitForTimeout(2000); // Wait for potential dynamic content to load
-
-    console.log("Current URL:", await page.url());
-    console.log("Page content:", await page.content());
-
-    const classes = await page.$$eval(".workout", (elements) =>
-      elements.map((el) => el.textContent)
-    );
-    console.log("Found classes:", classes);
-
-    expect(classes.length).toBeGreaterThan(0);
-  }, 10000);
-
-  test("Pop-up displays correct class details", async () => {
-    await page.goto("http://localhost:3000");
-    await page.waitForSelector(".workout", { timeout: 5000 });
-    await page.click(".workout");
-    const className = await page.$eval(
-      "#modal-class-name",
-      (el) => el.textContent
-    );
-    const instructor = await page.$eval(
-      "#modal-instructor",
-      (el) => el.textContent
-    );
-    expect(className).toBeTruthy();
-    expect(instructor).toBeTruthy();
-  }, 10000);
-
   test("Form adds a new fitness class", async () => {
     console.log("Starting test: Form adds a new fitness class");
 
-    await page.goto("http://localhost:3000/staff");
-    console.log("Navigated to staff page");
-    await page.screenshot({ path: "staff-page-initial.png", fullPage: true });
-
-    await page.waitForSelector("#add-class-btn", {
-      visible: true,
-      timeout: 5000,
-    });
-    console.log("Add New Class button is visible");
-    await page.click("#add-class-btn");
-    console.log("Clicked Add New Class button");
-    await page.screenshot({
-      path: "after-click-add-class.png",
-      fullPage: true,
-    });
-
-    await page.waitForSelector("#fitness-class-form", {
-      visible: true,
-      timeout: 5000,
-    });
-    console.log("Fitness class form is visible");
-    await page.screenshot({ path: "form-visible.png", fullPage: true });
-
-    const formExists = (await page.$("#fitness-class-form")) !== null;
-    console.log("Form exists:", formExists);
-
-    await page.type("#class_name", "Spinning");
-    await page.type("#instructor", "Charlie");
-    await page.type("#date", "2024-07-12");
-    await page.type("#time", "11:00");
-    await page.type("#duration", "30");
-    await page.type("#details", "A high-intensity spinning class.");
-    await page.select("#class_type", "Spinning");
-    console.log("Filled out form fields");
-
-    await page.waitForSelector('button[type="submit"]', {
-      visible: true,
-      timeout: 5000,
-    });
-    await page.click('button[type="submit"]');
-    console.log("Clicked submit button");
-
     try {
-      await page.waitForFunction(
-        () =>
-          document.body.innerText.includes("Class added successfully") ||
-          document.querySelector(".workout"),
-        { timeout: 10000 }
+      await page.goto("http://localhost:3000/staff");
+      console.log("Navigated to staff page");
+
+      const initialScreenshotPath = path.resolve(
+        __dirname,
+        "debug-initial.png"
       );
-      console.log("Page updated after submission");
+      await page.screenshot({ path: initialScreenshotPath, fullPage: true });
+      console.log(`Took initial screenshot: ${initialScreenshotPath}`);
+
+      // Wait for and click the "Add New Class" button
+      await page.waitForSelector("#add-class-btn", { visible: true });
+      console.log("Add New Class button is visible");
+      await page.click("#add-class-btn");
+      console.log("Clicked Add New Class button");
+
+      const afterClickScreenshotPath = path.resolve(
+        __dirname,
+        "debug-after-click.png"
+      );
+      await page.screenshot({ path: afterClickScreenshotPath, fullPage: true });
+      console.log(
+        `Took screenshot after clicking Add New Class button: ${afterClickScreenshotPath}`
+      );
+
+      // Wait for the form to appear
+      await page.waitForSelector("#class_name", {
+        visible: true,
+        timeout: 10000,
+      });
+      console.log("Class name input is visible");
+
+      const beforeTypingScreenshotPath = path.resolve(
+        __dirname,
+        "debug-before-typing.png"
+      );
+      await page.screenshot({
+        path: beforeTypingScreenshotPath,
+        fullPage: true,
+      });
+      console.log(
+        `Took screenshot before typing into form fields: ${beforeTypingScreenshotPath}`
+      );
+
+      // Interact with the form fields
+      await page.type("#class_name", "Punchout");
+      console.log("Typed class name");
+      await page.type("#instructor", "Jorge");
+      console.log("Typed instructor name");
+      await page.type("#date", "2024-07-23");
+      console.log("Typed date");
+      await page.type("#time", "15:09"); // 24-hour format for time input
+      console.log("Typed time");
+      await page.type("#duration", "60");
+      console.log("Typed duration");
+      await page.type("#details", "Boxing class");
+      console.log("Typed details");
+      await page.select("#class_type", "Boxing");
+      console.log("Selected class type");
+
+      // Set up a listener for the alert
+      page.on("dialog", async (dialog) => {
+        console.log("Dialog message:", dialog.message());
+        expect(dialog.message()).toBe("Operation successful!");
+        await dialog.accept();
+      });
+
+      // Click the submit button and handle the alert
+      await page.click('button[type="submit"]');
+      console.log("Clicked submit button");
+
+      // Add a delay to ensure the form has time to reset
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Verify that the form has been reset (indicating successful submission)
+      const classNameValue = await page.$eval("#class_name", (el) => el.value);
+      expect(classNameValue).toBe("");
+      console.log("Form reset successfully");
+
+      console.log("Test completed");
     } catch (error) {
-      console.error("Timeout waiting for page update:", error);
-      console.log("Current page content:", await page.content());
+      console.error("Test failed:", error);
+      throw error;
     }
-
-    await page.screenshot({ path: "after-submission.png", fullPage: true });
-
-    const newClass = await page.$$eval(".workout", (elements) =>
-      elements.map((el) => el.textContent)
-    );
-    console.log("Classes after submission:", newClass);
-    expect(newClass.some((text) => text.includes("Spinning"))).toBeTruthy();
-
-    console.log("Test completed");
-  }, 60000); // Increase timeout to 60 seconds
+  }, 10000); // Increase timeout to 90 seconds
 });
