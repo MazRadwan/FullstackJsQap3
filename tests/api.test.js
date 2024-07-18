@@ -1,6 +1,9 @@
 const request = require("supertest");
 const app = require("../index");
 
+// as a SweatSpot partner , i want to be able to fetch all the fitness_class records
+// from the database via REST API. The records will be returned in JSON format.
+
 describe("/api Endpoints", () => {
   let createdClassId;
 
@@ -25,12 +28,16 @@ describe("/api Endpoints", () => {
     createdClassId = res.body.id;
   });
 
+  // as a SweatSpot partner , i want to be able to fetch a single fitness_class record via REST API
+
   test("GET /api/class/:id", async () => {
     const res = await request(app).get(`/api/class/${createdClassId}`);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("id");
     expect(res.body.id).toBe(createdClassId);
   });
+
+  // as a SweatSpot partner , i want to be able to update a fitness_class record via REST API
 
   test("PUT /api/class/:id", async () => {
     const res = await request(app).put(`/api/class/${createdClassId}`).send({
@@ -46,6 +53,7 @@ describe("/api Endpoints", () => {
     expect(res.body.class_name).toBe("Updated Test Pilates");
   });
 
+  // as a SweatSpot partner , i want to be able to update a fitness_class record field via REST API
   test("PATCH /api/class/:id", async () => {
     const res = await request(app)
       .patch(`/api/class/${createdClassId}`)
@@ -53,6 +61,8 @@ describe("/api Endpoints", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body.class_name).toBe("Patched Test Pilates");
   });
+
+  // as a SweatSpot partner , i want to be able to delete a fitness_class record via REST API
 
   test("DELETE /api/class/:id", async () => {
     const res = await request(app).delete(`/api/class/${createdClassId}`);
