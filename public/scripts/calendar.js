@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const timestamp = new Date().getTime();
       const res = await fetch(
-        `/api/fitness_classes?month=${month}&year=${year}&_=${timestamp}`
+        `/api/class?month=${month}&year=${year}&_=${timestamp}`
       );
       if (!res.ok) {
         throw new Error(

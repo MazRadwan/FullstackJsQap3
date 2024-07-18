@@ -27,7 +27,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // Routes
-app.use("/api/fitness_classes", fitnessClassRoutes);
+app.use("/api/class", fitnessClassRoutes);
 
 app.get("/", (req, res) => {
   res.render("index");
