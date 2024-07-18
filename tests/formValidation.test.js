@@ -1,6 +1,8 @@
 const puppeteer = require("puppeteer");
 const path = require("path");
 
+// as a sweatSpot staff member, i want to be able to use a form to add a new fitness class
+
 describe("UI Tests", () => {
   let browser;
   let page;

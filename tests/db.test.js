@@ -1,5 +1,7 @@
 const pool = require("../services/db");
 
+// as a sweatSpot staff, i want to be able to insert a new fitness_class record into the database
+
 describe("Database Operations", () => {
   let insertedId;
 
@@ -20,10 +22,14 @@ describe("Database Operations", () => {
     insertedId = res.rows[0].id;
   });
 
+  // as a sweatSpot staff, i want to be able to fetch all the fitness_class records from the database
+
   test("Select fitness classes", async () => {
     const res = await pool.query("SELECT * FROM fitness_class");
     expect(res.rows.length).toBeGreaterThan(0);
   });
+
+  // as a sweatSpot staff, i want to be able to fetch a single fitness_class record from the database
 
   test("Update a fitness class", async () => {
     const res = await pool.query(
@@ -32,6 +38,8 @@ describe("Database Operations", () => {
     );
     expect(res.rows[0].class_name).toBe("Advanced Yoga");
   });
+
+  //  as a sweatSpot staff, i want to be able to delete a fitness_class record from the database
 
   test("Delete a fitness class", async () => {
     const res = await pool.query(

@@ -1,6 +1,8 @@
 const request = require("supertest");
 const app = require("../index"); // Your Express app
 
+// as SweatSpot dev , i want to handle errors gracefully
+
 describe("Error Handling", () => {
   test("Handles database connection errors gracefully", async () => {
     // Simulate a database connection error
