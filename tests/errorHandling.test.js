@@ -5,9 +5,7 @@ describe("Error Handling", () => {
   test("Handles database connection errors gracefully", async () => {
     // Simulate a database connection error
     jest.spyOn(global.console, "error").mockImplementation(() => {});
-    const res = await request(app).get(
-      "/api/fitness_classes/simulate-db-error"
-    );
+    const res = await request(app).get("/api/class/simulate-db-error");
     expect(res.statusCode).toEqual(503);
     expect(res.body).toHaveProperty("message", "Service Unavailable");
     console.error.mockRestore();
@@ -20,7 +18,7 @@ describe("Error Handling", () => {
   });
 
   test("Handles invalid input data gracefully", async () => {
-    const res = await request(app).post("/api/fitness_classes").send({
+    const res = await request(app).post("/api/class").send({
       class_name: "", // Invalid data
       instructor: "Bob",
       date: "invalid-date", // Invalid date
@@ -34,7 +32,7 @@ describe("Error Handling", () => {
   });
 
   test("Handles missing query or attribute parameters", async () => {
-    const res = await request(app).get("/api/fitness_classes/search").query({});
+    const res = await request(app).get("/api/class/search").query({});
     expect(res.statusCode).toEqual(400);
     expect(res.body).toHaveProperty(
       "message",
@@ -43,14 +41,14 @@ describe("Error Handling", () => {
   });
 
   test("Handles non-existent class ID", async () => {
-    const res = await request(app).get("/api/fitness_classes/9999");
+    const res = await request(app).get("/api/class/9999");
     expect(res.statusCode).toEqual(404);
     expect(res.body).toHaveProperty("message", "Class not found");
     expect(res.body).toHaveProperty("status", 404);
   });
 
   test("Handles error when deleting non-existent class ID", async () => {
-    const res = await request(app).delete("/api/fitness_classes/9999");
+    const res = await request(app).delete("/api/class/9999");
     expect(res.statusCode).toEqual(404);
     expect(res.body).toHaveProperty("message", "Class not found");
     expect(res.body).toHaveProperty("status", 404);

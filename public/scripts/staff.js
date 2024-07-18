@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const classData = Object.fromEntries(formData.entries());
 
       try {
-        const res = await fetch(`/api/fitness_classes/${classData.id || ""}`, {
+        const res = await fetch(`/api/class/${classData.id || ""}`, {
           method,
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(classData),
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
     queryResults.innerHTML = "<p>Loading...</p>";
     try {
       const res = await fetch(
-        `/api/fitness_classes/search?query=${encodeURIComponent(
+        `/api/class/search?query=${encodeURIComponent(
           queryField
         )}&attribute=${encodeURIComponent(queryAttribute)}`
       );
@@ -310,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
   confirmDeleteButton.addEventListener("click", async () => {
     if (classIdToDelete) {
       try {
-        const res = await fetch(`/api/fitness_classes/${classIdToDelete}`, {
+        const res = await fetch(`/api/class/${classIdToDelete}`, {
           method: "DELETE",
         });
         if (res.ok) {
@@ -344,7 +344,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.selectClassToUpdate = async (id) => {
     try {
-      const res = await fetch(`/api/fitness_classes/${id}`);
+      const res = await fetch(`/api/class/${id}`);
       if (res.ok) {
         const classData = await res.json();
         formSection.innerHTML = `
@@ -442,7 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
     queryResults.innerHTML = "<p>Loading...</p>";
     try {
       const res = await fetch(
-        `/api/fitness_classes/search?query=${encodeURIComponent(
+        `/api/class/search?query=${encodeURIComponent(
           queryField
         )}&attribute=${encodeURIComponent(queryAttribute)}`
       );
@@ -489,7 +489,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.selectFieldToUpdate = (id) => {
     console.log("selectFieldToUpdate called with id:", id); // Debug log
     // Fetch the selected class details to display a summary
-    fetch(`/api/fitness_classes/${id}`)
+    fetch(`/api/class/${id}`)
       .then((response) => response.json())
       .then((classData) => {
         // Display the summary and field selection input
@@ -599,7 +599,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updatedField[field] = newValue;
 
     try {
-      const res = await fetch(`/api/fitness_classes/${classId}`, {
+      const res = await fetch(`/api/class/${classId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedField),
